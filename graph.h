@@ -31,34 +31,41 @@ public:
         return adjacencyList;
     }
 
+    /**
+     * Affiche le graphe 
+    */
     void display_graph(){
-        int i,j,cmpt;
+        int i,j;
         printf("\nAffichage du graphe via liste d'adjacence (%d sommets possibles): \n##################################\n\n",MAX_VERTICES);
-        short int existingVertices[MAX_VERTICES];
-        for (size_t i = 0; i < MAX_VERTICES; i++)
-            existingVertices[i]=i;
-        
-        cmpt=0;
-        for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i+=(MAX_VERTICES-1))
-        {
-            if (adjacencyList[i] == -2)
-                existingVertices[cmpt]=-2;
-            cmpt++;
-        }
+        short int* existingVertices = actual_vertices();
         for (i = 0; i < MAX_VERTICES; i++)
         {
-            if (existingVertices[i] != -2)
+            if (existingVertices[i]) // on verifie si le sommet i existe bien
             {
                 printf("Voisins du sommet %d : ",i);
                 
-                for (j = 0; j <(MAX_VERTICES-1); j++){
-                    if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] != -1)
+                for (j = 0; j <(MAX_VERTICES-1); j++)
+                    if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] != -2)
                         printf("%d  ",adjacencyList[(i * (MAX_VERTICES - 1)) + j]);
-                }
                 // printf("  ///i=%d,j=%d///\n",i,j); // ligne a utiliser pour debug cette methode
                 printf("\n");
             }
         }
         printf("\n##################################\n");
     }
+
+    short int* actual_vertices(){
+        int cmpt=0,i;
+        short int* existingVertices = (short int*)malloc(MAX_VERTICES * sizeof(short int));
+        for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i+=(MAX_VERTICES-1))
+        {
+            if (adjacencyList[i] != -2)
+                existingVertices[cmpt]=1;
+            else
+                existingVertices[cmpt]=0;
+            cmpt++;
+        }
+        return existingVertices;
+    }
+   
 };
