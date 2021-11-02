@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_VERTICES 5
+#define MAX_VERTICES 500
 /**
  * @class graph
  * Cette classe permet de manipuler des graphes selon 
@@ -82,9 +82,11 @@ public:
 
     bool add_edge(short int verticeSrc, short int verticeDest){
         short int i;
-        if (adjacencyList[verticeSrc*(MAX_VERTICES-1)] == -2 || adjacencyList[verticeDest*(MAX_VERTICES-1)] == -2 || verticeDest==verticeSrc || \
-        verticeDest < 0 || verticeSrc < 0 || verticeDest >= MAX_VERTICES || verticeSrc >= MAX_VERTICES)
+        if (verticeDest==verticeSrc || verticeDest < 0 || verticeSrc < 0 || verticeDest >= MAX_VERTICES || verticeSrc >= MAX_VERTICES)
+            return false; // les valeurs donnees sont incorrects
+        if (adjacencyList[verticeSrc*(MAX_VERTICES-1)] == -2 || adjacencyList[verticeDest*(MAX_VERTICES-1)] == -2)
             return false; // le cas ou au moins un des deux sommets n'existe pas
+        
         for (i = 0; i < MAX_VERTICES-1; i++)
             if (adjacencyList[(verticeSrc * (MAX_VERTICES-1)) + i] == verticeDest)
                 return true; // false ou true ? // le cas ou il existe deja une arrete entre les deux sommets
@@ -103,6 +105,10 @@ public:
                 }
             }
         }
+        return false;
+    }
+
+    bool del_vertice(short int verticeToDelete){
         return false;
     }
 };
