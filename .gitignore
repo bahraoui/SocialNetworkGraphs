@@ -32,4 +32,4 @@
 *.app
 
 # Visual studio code settings
-*.vscode
+.vscode/
