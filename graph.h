@@ -60,9 +60,9 @@ public:
         for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i+=(MAX_VERTICES-1))
         {
             if (adjacencyList[i] != -2)
-                existingVertices[cmpt]=1;
+                existingVertices[cmpt]=1; // en c,  <=> true
             else
-                existingVertices[cmpt]=0;
+                existingVertices[cmpt]=0; // en c, 0 <=> false
             cmpt++;
         }
         return existingVertices;
