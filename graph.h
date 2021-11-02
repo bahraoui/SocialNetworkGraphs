@@ -60,7 +60,7 @@ public:
                 printf("Voisins du sommet %d : ",i);
                 
                 for (j = 0; j <(MAX_VERTICES-1); j++)
-                    if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] != -2)
+                    if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] != -1)
                         printf("%d  ",adjacencyList[(i * (MAX_VERTICES - 1)) + j]);
                 // printf("  ///i=%d,j=%d///\n",i,j); // ligne a utiliser pour debug cette methode
                 printf("\n");
@@ -82,7 +82,8 @@ public:
 
     bool add_edge(short int verticeSrc, short int verticeDest){
         short int i;
-        if (adjacencyList[verticeSrc*(MAX_VERTICES-1)] == -2 || adjacencyList[verticeDest*(MAX_VERTICES-1)] == -2 || verticeDest==verticeSrc)
+        if (adjacencyList[verticeSrc*(MAX_VERTICES-1)] == -2 || adjacencyList[verticeDest*(MAX_VERTICES-1)] == -2 || verticeDest==verticeSrc || \
+        verticeDest < 0 || verticeSrc < 0 || verticeDest >= MAX_VERTICES || verticeSrc >= MAX_VERTICES)
             return false; // le cas ou au moins un des deux sommets n'existe pas
         for (i = 0; i < MAX_VERTICES-1; i++)
             if (adjacencyList[(verticeSrc * (MAX_VERTICES-1)) + i] == verticeDest)
