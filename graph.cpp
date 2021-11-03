@@ -3,14 +3,17 @@
 
 int main() 
 {
+    srand(time(NULL)); //Permet d'avoir nos valeurs aleatoires (proba)
     graph mama = graph();
-    mama.display_graph(); // graphe vide
-    mama.add_vertice(2);
-    printf("%d",mama.add_edge(1,2));
-    printf("%d",mama.add_edge(-9,2));
-    mama.display_graph(); // graphe pas vide (meme si auncun sens pr l'instant)
-    printf("MAMA : %d\n",mama.get_adjacencyList()[5]);
+    mama.add_vertice(3);
+    mama.add_edge(0,1);
+    mama.add_edge(0,2);
+    mama.add_edge(1,2);
+    //mama.display_graph(); // graphe pas vide (meme si auncun sens pr l'instant)
     
+    mama.barabasi_albert(2);
+    mama.display_graph();
+
     /*int listSubgraphe[2] = {5,4};
     int subgrapheSize = 2;
 
