@@ -12,7 +12,10 @@ int main()
         moyenne += mama.random_graph(0.9);
     }
     printf("moyenne : %f\n",((float)moyenne/nbessais));
-    
+    /*
+    mama.barabasi_albert(2);
+    mama.display_graph();
+    */
     /*int listSubgraphe[2] = {5,4};
     int subgrapheSize = 2;
 

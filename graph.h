@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define MAX_VERTICES 15
 /**
@@ -132,10 +133,36 @@ public:
         return false;
     }
 
+    int get_number_neighbors(short int verticeNumber) {
+        int i, numberNeighbors = 0;
+
+        for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1)-1; i++)
+            if (adjacencyList[i] !=-1) {
+                numberNeighbors++;
+            }
+
+        return numberNeighbors;
+    }
+
+    bool is_graph_valid() {
+        if (totalDegree > 0){
+            return true;
+        }
+        return false;
+    }
 
     bool is_clique() {
         //si le graphe comporte plus de deux sommets
         //chaque sommet est lié a tout les autres = complet
+        int i;
+
+        if (numberVertices < 2){
+            return false;
+        }
+        for (i = 0; i < numberVertices; i++)
+            if (get_number_neighbors(i) != MAX_VERTICES-1) 
+                return false;
+        
         return true;
     }
 
@@ -148,15 +175,12 @@ public:
     }
 
     void barabasi_albert(short int m) {
-        if (!is_clique()){
+        if (!is_graph_valid()){
             return;
         }
 
         int i = 0;
         float barabasiAlbertProbability;
-
-        //calcul proba
-        barabasiAlbertProbability = (numberVertices-1)/totalDegree;
 
         //graphe 3 sommet triangle
 
@@ -166,10 +190,13 @@ public:
         //graphe 3 sommet triangle + 1 noeud solo
 
         while (m > 0 && i < numberVertices-1) {
-            if (result_probability(barabasiAlbertProbability))
+            //calcul proba
+            barabasiAlbertProbability = (float)get_number_neighbors(i)/totalDegree;
+            if (result_probability(barabasiAlbertProbability)) {
                 add_edge(numberVertices,i);
-
-            m--;i++;
+                m--;
+            }
+            i++;
         }
     }
 
