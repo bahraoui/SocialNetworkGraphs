@@ -15,11 +15,15 @@ class graph
 {
 private:
     short int* adjacencyList;
+    short int totalDegree;
+    short int numberVertices;
 public:
     
     graph() 
     {
         int i;
+
+        totalDegree = 0;numberVertices =0;
 
         adjacencyList = (short int *)malloc((MAX_VERTICES * (MAX_VERTICES-1)) * sizeof(short int));
 
@@ -31,8 +35,8 @@ public:
         return adjacencyList;
     }
 
-
-    short int* actual_vertices(){
+    //obselete fct
+    short int* get_actual_vertices(){
         int cmpt=0,i;
         short int* existingVertices = (short int*)malloc(MAX_VERTICES * sizeof(short int));
         for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i+=(MAX_VERTICES-1))
@@ -52,7 +56,7 @@ public:
     void display_graph(){
         int i,j;
         printf("\nAffichage du graphe via liste d'adjacence (%d sommets possibles): \n##################################\n\n",MAX_VERTICES);
-        short int* existingVertices = actual_vertices();
+        short int* existingVertices = get_actual_vertices();
         for (i = 0; i < MAX_VERTICES; i++)
         {
             if (existingVertices[i]) // on verifie si le sommet i existe bien
@@ -70,14 +74,20 @@ public:
         printf("\n##################################\n");
     }
 
-    bool add_vertice(short int verticeToAdd){
-        short int i;
-        if (adjacencyList[verticeToAdd*(MAX_VERTICES-1)] != -2 || verticeToAdd < 0 || verticeToAdd >= MAX_VERTICES)
-            // print (sommet existe deja) : a mettre la ou il sera utilise plus tard
-            return false;
-        for (i = verticeToAdd*(MAX_VERTICES-1); i < (verticeToAdd+1)*(MAX_VERTICES-1); i++)
-            adjacencyList[i]=-1;
-        return true;
+    bool add_vertice(int numberVerticeToAdd){
+        int i, j;
+        for (j = 0; j < numberVerticeToAdd; j++)
+        {
+            if(numberVertices + 1 < MAX_VERTICES)
+            {
+                numberVertices += 1;
+                for (i = numberVertices*(MAX_VERTICES-1); i < (numberVertices+1)*(MAX_VERTICES-1); i++)
+                    adjacencyList[i]=-1;
+            }
+            else 
+                return false;  
+        }
+        return true;    
     }
 
     bool add_edge(short int verticeSrc, short int verticeDest){
@@ -100,6 +110,7 @@ public:
                     if (adjacencyList[(verticeDest * (MAX_VERTICES-1)) + i] == -1) // idem
                     {
                         adjacencyList[(verticeDest * (MAX_VERTICES-1)) + i] = verticeSrc;
+                        totalDegree += 2;
                         return true;
                     }
                 }
@@ -108,7 +119,44 @@ public:
         return false;
     }
 
-    bool del_vertice(short int verticeToDelete){
+
+    bool is_clique() {
+        //si le graphe comporte plus de deux sommets
+        //chaque sommet est lié a tout les autres = complet
+        return true;
+    }
+
+    bool result_probability(float probability) {
+        float r = ((double) rand() / (RAND_MAX));
+        printf("%f -- %f\n",r,probability);
+        if (r <= probability) 
+            return true;
         return false;
+    }
+
+    void barabasi_albert(short int m) {
+        if (!is_clique()){
+            return;
+        }
+
+        int i = 0;
+        float barabasiAlbertProbability;
+
+        //calcul proba
+        barabasiAlbertProbability = (numberVertices-1)/totalDegree;
+
+        //graphe 3 sommet triangle
+
+        //Ajout d'un nouveau noeud
+        add_vertice(1);
+
+        //graphe 3 sommet triangle + 1 noeud solo
+
+        while (m > 0 && i < numberVertices-1) {
+            if (result_probability(barabasiAlbertProbability))
+                add_edge(numberVertices,i);
+
+            m--;i++;
+        }
     }
 };
