@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_VERTICES 500
+#define MAX_VERTICES 15
 /**
  * @class graph
  * Cette classe permet de manipuler des graphes selon 
@@ -23,7 +23,7 @@ public:
     {
         int i;
 
-        totalDegree = 0;numberVertices =0;
+        totalDegree = 0;numberVertices = -1;
 
         adjacencyList = (short int *)malloc((MAX_VERTICES * (MAX_VERTICES-1)) * sizeof(short int));
 
@@ -70,6 +70,19 @@ public:
                 printf("\n");
 
             }
+        }
+        printf("\n##################################\n");
+    }
+
+    void display_matrix(){
+        int i,j;
+        printf("\n\n##################################\n\n");
+        for (i = 0; i < MAX_VERTICES; i++)
+        {                
+            for (j = 0; j <(MAX_VERTICES-1); j++)
+                printf("%d  ",adjacencyList[(i * (MAX_VERTICES - 1)) + j]);
+            // printf("  ///i=%d,j=%d///\n",i,j); // ligne a utiliser pour debug cette methode
+            printf("\n");
         }
         printf("\n##################################\n");
     }
@@ -128,7 +141,7 @@ public:
 
     bool result_probability(float probability) {
         float r = ((double) rand() / (RAND_MAX));
-        printf("%f -- %f\n",r,probability);
+        //printf("%f -- %f\n",r,probability);
         if (r <= probability) 
             return true;
         return false;
@@ -158,5 +171,24 @@ public:
 
             m--;i++;
         }
+    }
+
+    int random_graph(float probability){
+        int i,j,cmpt=0;
+        if (probability < 0.0001 || probability > 0.9999) // on verifie que la proba donnee est correcte
+            return cmpt;
+        //display_matrix();
+        for (i = 0; i <= numberVertices; i++) // chaque sommet existant
+        {
+            for (j = (i+1); j <=(numberVertices);  j++) { // chaque voisin du sommet i
+                //printf("i : %d, j : %d\n",i,j);
+                if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] == -1 && result_probability(probability)) // a opti
+                {
+                    add_edge(j,i);
+                    cmpt++;
+                }
+            }
+        }
+        return cmpt;
     }
 };
