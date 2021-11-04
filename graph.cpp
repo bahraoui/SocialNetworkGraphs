@@ -3,15 +3,18 @@
 
 int main() 
 {
-    int moyenne=0,i,nbessais=1000;
+    int moyenne=0,i,nbessais=1;
     srand(time(NULL));
+    graph mama;
     for (i = 0; i < nbessais; i++)
     {
-        graph mama = graph();
+        mama = graph();
         mama.add_vertice(10);
-        moyenne += mama.random_graph(0.9);
+        moyenne += mama.random_graph(0.50);
+        //mama.display_graph();
+        mama.free_graph();
     }
-    printf("moyenne : %f\n",((float)moyenne/nbessais));
+    printf("essais : %d\nmoyenne : %f\n",nbessais,((float)moyenne/nbessais));
     /*
     mama.barabasi_albert(2);
     mama.display_graph();

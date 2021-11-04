@@ -31,6 +31,10 @@ public:
         for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i++)
             adjacencyList[i]= -2;
     }
+
+    void free_graph(){
+        free(adjacencyList);
+    }
     
     short int* get_adjacencyList() {
         return adjacencyList;
@@ -208,10 +212,11 @@ public:
         for (i = 0; i <= numberVertices; i++) // chaque sommet existant
         {
             for (j = (i+1); j <=(numberVertices);  j++) { // chaque voisin du sommet i
-                //printf("i : %d, j : %d\n",i,j);
-                if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] == -1 && result_probability(probability)) // a opti
+                if (adjacencyList[(i * (numberVertices -1)) + j] == -1 && result_probability(probability)) // a opti
                 {
-                    add_edge(j,i);
+                printf("i : %d, j : %d\n",i,j);
+                    //printf("cmpt : %d, edge : %d\n",cmpt,add_edge(i,j));
+                    add_edge(i,j);
                     cmpt++;
                 }
             }
