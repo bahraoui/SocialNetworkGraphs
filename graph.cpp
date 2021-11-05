@@ -25,11 +25,11 @@ int main()
     mama.add_edge(2,0);
     mama.add_edge(2,3);
     mama.display_graph();
-    short int** cliquesMaximales;
-    cliquesMaximales = (short int**)malloc(MAX_VERTICES*MAX_VERTICES*sizeof(short int));
+    short int* cliquesMaximales;
+    cliquesMaximales = (short int*)malloc(MAX_VERTICES*MAX_VERTICES*sizeof(short int));
     for (i = 0; i < MAX_VERTICES; i++)
         for (j = 0; j < MAX_VERTICES; j++)
-            cliquesMaximales[i][j]=-1;
+            cliquesMaximales[i * MAX_VERTICES + j] = -1;
     vertices P = vertices();
     vertices R = vertices();
     vertices X = vertices();
@@ -43,6 +43,15 @@ int main()
     }
     P.display_vertices();
     mama.BronKerbosch(P,R,X,cliquesMaximales);
+    for (i = 0; i < MAX_VERTICES; i++)
+    {
+        for (j = 0; j < MAX_VERTICES; j++)
+        {
+            /* afficher cliquesMaximales */
+        }
+        
+    }
+    
     
    /* 
     // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices

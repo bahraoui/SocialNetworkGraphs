@@ -240,7 +240,7 @@ public:
         return cmpt;
     }
 
-    void BronKerbosch(vertices P, vertices R, vertices X, short int** cliquesMax){
+    void BronKerbosch(vertices P, vertices R, vertices X, short int* cliquesMax){
         /**
          * Conditions intiales :
          *  Mettre toutes les valeurs de cliquesMax/R/X a 0
@@ -260,14 +260,19 @@ public:
             // on ajoute au tableau de cliquesMax le R trouve
             for (i = 0; i < MAX_VERTICES; i++)
             {
-                if (cliquesMax[i][0] == -1)
+                if (cliquesMax[i * MAX_VERTICES] == -1)
                 {
-                    memcpy(cliquesMax[i],R.get_verticesList(),MAX_VERTICES*sizeof(short int));
+                    //memcpy(cliquesMax[i * MAX_VERTICES],R.get_verticesList(),MAX_VERTICES*sizeof(short int));
+                    int j;
+                    for (j = 0; j < MAX_VERTICES; j++)
+                    {
+                        cliquesMax[(i * MAX_VERTICES) + j] = R.get_verticesList()[j];
+                    }
+                    
                     return;
                 }
             }            
         }
-
         for (i = 0; i <= numberVertices; i++) // Pour tout sommet v de P
         {
             short int v = P.get_verticesList()[i];
