@@ -79,14 +79,16 @@ vertices::vertices(){
 vertices vertices::cloneVertices(){
     vertices verticesToReturn = vertices();
     int i;
-    this->numberOfVerticesInList = verticesToReturn.numberOfVerticesInList;
+    verticesToReturn.numberOfVerticesInList = this->numberOfVerticesInList;
     for (i = 0; i < MAX_VERTICES; i++)
-        this->verticesList[i] = verticesToReturn.verticesList[i];
+        verticesToReturn.verticesList[i] = this->verticesList[i] ;
+    printf("-%d-",this->verticesList[0]);
+    printf("#%d#",verticesToReturn.verticesList[0]);
     return verticesToReturn;
 }
 
 void vertices::display_vertices(){
-    printf("[");
+    printf("%d : [",this->numberOfVerticesInList);
     int i;
     for (i = 0; i < MAX_VERTICES-1; i++)
     {
@@ -142,7 +144,7 @@ bool vertices::del_vertice(short int verticeToDelete){
 }
 
 bool vertices::add_vertices(short int* verticesToAdd, short int numberOfVerticesToAdd){
-    int i,j;
+    int i,j,cmpt=0;
     if (numberOfVerticesToAdd < 0 || numberOfVerticesToAdd > MAX_VERTICES)
         return false;
     for ( j = 0; j < numberOfVerticesToAdd; j++)
@@ -159,7 +161,8 @@ bool vertices::add_vertices(short int* verticesToAdd, short int numberOfVertices
             if (this->verticesList[i] == -1)
             {
                 this->numberOfVerticesInList += 1;
-                this->verticesList[i] = verticesToAdd[j];
+                this->verticesList[i] = verticesToAdd[cmpt];
+                cmpt++;
             }
         }
     }

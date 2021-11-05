@@ -166,6 +166,12 @@ public:
             neighbors[j]=adjacencyList[i];
             j++;
         }
+
+            printf("voisins de %d\n",verticeNumber);
+        for (i=0; i<numberNeighbor; i++){
+            printf("%d ",neighbors[i]);
+        }
+        printf("\n");
         return neighbors;
     }
 
@@ -273,13 +279,17 @@ public:
                 }
             }            
         }
-        for (i = 0; i <= numberVertices; i++) // Pour tout sommet v de P
+        for (i = 0; i < numberVertices; i++) // Pour tout sommet v de P
         {
             short int v = P.get_verticesList()[i];
             // a finir =>
+            ///printf("1 :");
+            P.display_vertices();
             P.add_vertices(get_neighbors(v),get_number_neighbors(v));
             X.add_vertices(get_neighbors(v),get_number_neighbors(v));
             R.add_vertice(v);
+            ///printf("2 :");
+            ///P.display_vertices();
             BronKerbosch(P.cloneVertices(), R.cloneVertices(), X.cloneVertices(), cliquesMax);
             P.del_vertice(v);
             X.add_vertice(v);

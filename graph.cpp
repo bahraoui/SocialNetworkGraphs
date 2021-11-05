@@ -43,14 +43,6 @@ int main()
     }
     P.display_vertices();
     mama.BronKerbosch(P,R,X,cliquesMaximales);
-    for (i = 0; i < MAX_VERTICES; i++)
-    {
-        for (j = 0; j < MAX_VERTICES; j++)
-        {
-            /* afficher cliquesMaximales */
-        }
-        
-    }
     
     
    /* 
