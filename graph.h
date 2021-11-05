@@ -35,7 +35,7 @@ public:
     }
 
     short int get_numberVertices(){
-        return numberVertices;
+        return numberVertices+1;
     }
 
     short int get_totalDegree(){
@@ -57,7 +57,7 @@ public:
         for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i+=(MAX_VERTICES-1))
         {
             if (adjacencyList[i] != -2)
-                existingVertices[cmpt]=1; // en c,  <=> true
+                existingVertices[cmpt]=1; // en c, 1 <=> true
             else
                 existingVertices[cmpt]=0; // en c, 0 <=> false
             cmpt++;
@@ -152,11 +152,21 @@ public:
         int i, numberNeighbors = 0;
 
         for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1)-1; i++)
-            if (adjacencyList[i] !=-1) {
+            if (adjacencyList[i] !=-1)
                 numberNeighbors++;
-            }
 
         return numberNeighbors;
+    }
+
+    short int* get_neighbors(short int verticeNumber){
+        int i, j=0, numberNeighbor = get_number_neighbors(verticeNumber); // double boucle necessaire pour simplification de la fonction add_vertices dans vertices
+        short int* neighbors = (short int*)malloc(numberNeighbor*sizeof(short int));
+        for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1)-1; i++)
+        if (adjacencyList[i] !=-1) {
+            neighbors[j]=adjacencyList[i];
+            j++;
+        }
+        return neighbors;
     }
 
     bool is_graph_valid() {
@@ -197,12 +207,12 @@ public:
         int i = 0;
         float barabasiAlbertProbability;
 
-        //graphe 3 sommet triangle
+        //graphe n sommet
 
         //Ajout d'un nouveau noeud
         add_vertice(1);
 
-        //graphe 3 sommet triangle + 1 noeud solo
+        //graphe n sommet + 1 noeud sans arrete
 
         while (m > 0 && i < numberVertices-1) {
             //calcul proba
@@ -223,10 +233,8 @@ public:
         for (i = 0; i <= numberVertices; i++) // chaque sommet existant
         {
             for (j = (i+1); j <=(numberVertices);  j++) { // chaque voisin du sommet i
-                if (adjacencyList[(i * (numberVertices -1)) + j] == -1 && result_probability(probability)) // a opti
-                {
+                if (adjacencyList[(i * (numberVertices -1)) + j] == -1 && result_probability(probability))
                     add_edge(i,j);
-                }
             }
         }
         return cmpt;
@@ -245,6 +253,7 @@ public:
             P := P \ {v}
             X := X ⋃ {v}
          */
+        int i;
         if (P.get_number_vertices() == 0 && X.get_number_vertices() == 0) // P et X sont vides
         {
             int i;
@@ -258,12 +267,18 @@ public:
                 }
             }            
         }
-        /*
-        for (i = 0; i < MAX_VERTICES; i++) // Pour tout sommet de 
+
+        for (i = 0; i <= numberVertices; i++) // Pour tout sommet v de P
         {
-            BronKerbosch()
+            short int v = P.get_verticesList()[i];
+            // a finir =>
+            P.add_vertices(get_neighbors(v),get_number_neighbors(v));
+            X.add_vertices(get_neighbors(v),get_number_neighbors(v));
+            R.add_vertice(v);
+            BronKerbosch(P.cloneVertices(), R.cloneVertices(), X.cloneVertices(), cliquesMax);
+            P.del_vertice(v);
+            X.add_vertice(v);
         }
-        */
     }
 
 

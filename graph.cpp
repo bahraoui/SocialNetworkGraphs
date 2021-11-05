@@ -4,7 +4,7 @@
 int main() 
 {
     srand(time(NULL));
-    int i;
+    int i,j;
     graph mama = graph();
     /*
     int moyenne=0,i,nbessais=1;
@@ -19,11 +19,30 @@ int main()
     }
     printf("essais : %d\nmoyenne : %f\n",nbessais,((float)moyenne/nbessais));
     */
-    short int cliquesMaximales[MAX_VERTICES][MAX_VERTICES];
-    if (cliquesMaximales[0][0] != 0)
+    mama.add_vertice(4);
+    mama.add_edge(0,1);
+    mama.add_edge(1,2);
+    mama.add_edge(2,0);
+    mama.add_edge(2,3);
+    mama.display_graph();
+    short int** cliquesMaximales;
+    cliquesMaximales = (short int**)malloc(MAX_VERTICES*MAX_VERTICES*sizeof(short int));
+    for (i = 0; i < MAX_VERTICES; i++)
+        for (j = 0; j < MAX_VERTICES; j++)
+            cliquesMaximales[i][j]=-1;
+    vertices P = vertices();
+    vertices R = vertices();
+    vertices X = vertices();
+    printf("debug : %d\n", mama.get_adjacencyList()[0]);
+    j=0;
+    for (i = 0; i < mama.get_numberVertices() * (MAX_VERTICES-1); i+= (MAX_VERTICES-1))
     {
-        printf("ok\n");
+        printf("j: %d\n",j);
+        P.add_vertice(j);
+        j++;
     }
+    P.display_vertices();
+    mama.BronKerbosch(P,R,X,cliquesMaximales);
     
    /* 
     // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices
