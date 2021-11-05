@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+#include "vertices.h"
 
-#define MAX_VERTICES 15
 /**
  * @class graph
+ * @brief graphe en liste d'adjacence 
  * Cette classe permet de manipuler des graphes selon 
  * la théorie des graphes.
  * champ privé : adjacencyList liste d'adjacence du graphe
@@ -30,6 +32,14 @@ public:
 
         for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i++)
             adjacencyList[i]= -2;
+    }
+
+    short int get_numberVertices(){
+        return numberVertices;
+    }
+
+    short int get_totalDegree(){
+        return totalDegree;
     }
 
     void free_graph(){
@@ -83,7 +93,8 @@ public:
         int i,j;
         printf("\n\n##################################\n\n");
         for (i = 0; i < MAX_VERTICES; i++)
-        {                
+        {              
+            printf("%d => ",i);  
             for (j = 0; j <(MAX_VERTICES-1); j++)
                 printf("%d  ",adjacencyList[(i * (MAX_VERTICES - 1)) + j]);
             // printf("  ///i=%d,j=%d///\n",i,j); // ligne a utiliser pour debug cette methode
@@ -204,23 +215,56 @@ public:
         }
     }
 
-    int random_graph(float probability){
+    bool random_graph(float probability){
         int i,j,cmpt=0;
         if (probability < 0.0001 || probability > 0.9999) // on verifie que la proba donnee est correcte
-            return cmpt;
+            return false;
         //display_matrix();
         for (i = 0; i <= numberVertices; i++) // chaque sommet existant
         {
             for (j = (i+1); j <=(numberVertices);  j++) { // chaque voisin du sommet i
                 if (adjacencyList[(i * (numberVertices -1)) + j] == -1 && result_probability(probability)) // a opti
                 {
-                printf("i : %d, j : %d\n",i,j);
-                    //printf("cmpt : %d, edge : %d\n",cmpt,add_edge(i,j));
                     add_edge(i,j);
-                    cmpt++;
                 }
             }
         }
         return cmpt;
     }
+
+    void BronKerbosch(vertices P, vertices R, vertices X, short int** cliquesMax){
+        /**
+         * Conditions intiales :
+         *  Mettre toutes les valeurs de cliquesMax/R/X a 0
+         *  P doit au depart contenir tous les sommets du graphe
+         * Algo:
+        si P et X sont vides alors
+            déclarer R clique maximale
+        pour tout sommet v de P faire
+            BronKerbosch1(R ⋃ {v}, P ⋂ N(v), X ⋂ N(v))
+            P := P \ {v}
+            X := X ⋃ {v}
+         */
+        if (P.get_number_vertices() == 0 && X.get_number_vertices() == 0) // P et X sont vides
+        {
+            int i;
+            // on ajoute au tableau de cliquesMax le R trouve
+            for (i = 0; i < MAX_VERTICES; i++)
+            {
+                if (cliquesMax[i][0] == -1)
+                {
+                    memcpy(cliquesMax[i],R.get_verticesList(),MAX_VERTICES*sizeof(short int));
+                    return;
+                }
+            }            
+        }
+        /*
+        for (i = 0; i < MAX_VERTICES; i++) // Pour tout sommet de 
+        {
+            BronKerbosch()
+        }
+        */
+    }
+
+
 };
