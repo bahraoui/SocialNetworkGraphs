@@ -1,3 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <vector>
+#include <map>
+#include <chrono>
+#include <thread>
 #define MAX_VERTICES 15
 
 class vertices
@@ -58,13 +66,22 @@ class vertices
 
 
         /**
-         * @brief Supprime un sommet de la liste
+         * @brief 
          * 
-         * @param verticeToDelete le sommet a supprimer
-         * @return true si la suppression a bien ete efffectue
-         * @return false si la suppresion n'a pas ete fait
+         * @param verticeToDelete 
+         * @return true 
+         * @return false 
          */
         bool del_vertice(short int verticeToDelete);
+
+        /**
+         * @brief verifie si contient le sommet en entree
+         * 
+         * @param verticeToVerify le sommet a rechercher
+         * @return true si sommet trouve
+         * @return false sinon
+         */
+        bool contains(short int verticeToVerify);
 
 };
 
@@ -77,13 +94,14 @@ vertices::vertices(){
 }
 
 vertices vertices::cloneVertices(){
-    vertices verticesToReturn = vertices();
+    vertices verticesToReturn;
+    verticesToReturn = vertices();
     int i;
     verticesToReturn.numberOfVerticesInList = this->numberOfVerticesInList;
     for (i = 0; i < MAX_VERTICES; i++)
-        verticesToReturn.verticesList[i] = this->verticesList[i] ;
-    printf("-%d-",this->verticesList[0]);
-    printf("#%d#",verticesToReturn.verticesList[0]);
+        verticesToReturn.verticesList[i] = this->verticesList[i];
+    /*printf("-%d-",this->verticesList[0]);
+    printf("#%d#",verticesToReturn.verticesList[0]);*/
     return verticesToReturn;
 }
 
@@ -99,7 +117,7 @@ void vertices::display_vertices(){
 }
 
 short int* vertices::get_verticesList(){
-    return verticesList;
+    return this->verticesList;
 }
 
 short int vertices::get_number_vertices(){
@@ -108,10 +126,10 @@ short int vertices::get_number_vertices(){
 
 bool vertices::add_vertice(short int verticeToAdd){
     int i;
-    if (verticeToAdd < 0 || verticeToAdd > MAX_VERTICES)
+    if (verticeToAdd < 0 || verticeToAdd > MAX_VERTICES) // sommet en entree incorrecte
         return false;
     
-    for (i = 0; i < MAX_VERTICES; i++)
+    for (i = 0; i < MAX_VERTICES; i++) // sommet deja dans la liste
         if (this->verticesList[i] == verticeToAdd)
             return false;
 
@@ -128,43 +146,48 @@ bool vertices::add_vertice(short int verticeToAdd){
 }
 
 bool vertices::del_vertice(short int verticeToDelete){
-    int i;
+    int i,j=0, max = MAX_VERTICES;
     if (verticeToDelete < 0 || verticeToDelete > MAX_VERTICES)
         return false;
-    for (i = 0; i < MAX_VERTICES; i++)
+    
+    for(i=0; i<max; i++)
     {
-        if (this->verticesList[i]==verticeToDelete)
+        if(this->verticesList[i] ==verticeToDelete)
         {
-            this->verticesList[i] = -1;
-            this->numberOfVerticesInList -= 1;
-            return true;
+            for(j=i; j<(max-1); j++)
+                this->verticesList[j] = this->verticesList[j+1];
+            i--;
+            max--;
         }
     }
-    return false;    
+    this->numberOfVerticesInList--;
+    return true;    
 }
 
 bool vertices::add_vertices(short int* verticesToAdd, short int numberOfVerticesToAdd){
-    int i,j,cmpt=0;
+    int i,j;
     if (numberOfVerticesToAdd < 0 || numberOfVerticesToAdd > MAX_VERTICES)
         return false;
-    for ( j = 0; j < numberOfVerticesToAdd; j++)
+    i=j=0;
+    while (numberOfVerticesToAdd != 0)
     {
-        if (verticesToAdd[j] < 0 || verticesToAdd[j] > MAX_VERTICES) // valeur incorrecte
-            continue;
-        
-        for (i = 0; i < MAX_VERTICES; i++)
-            if (this->verticesList[i] == verticesToAdd[j]) // valeur deja dans la liste
-                continue;
-
-        for (i = 0; i < MAX_VERTICES; i++)
+        if (this->verticesList[i] == -1)
         {
-            if (this->verticesList[i] == -1)
-            {
-                this->numberOfVerticesInList += 1;
-                this->verticesList[i] = verticesToAdd[cmpt];
-                cmpt++;
-            }
+            this->numberOfVerticesInList += 1;
+            this->verticesList[i] = verticesToAdd[j];
+            numberOfVerticesToAdd--;
+            j++;
         }
+        i++;
     }
     return true;
+}
+
+
+bool vertices::contains(short int verticeToVerify){
+    int i;
+    for (i = 0; i < MAX_VERTICES; i++)
+        if (this->get_verticesList()[i] == verticeToVerify)
+            return true;
+    return false;
 }

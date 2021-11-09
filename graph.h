@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
 #include "vertices.h"
+
+#define SIZE_SHORT_INT 2
+
+using namespace std;
+using namespace std::this_thread; // sleep_for, sleep_until
+using namespace std::chrono; 
 
 /**
  * @class graph
@@ -20,6 +22,8 @@ private:
     short int* adjacencyList;
     short int totalDegree;
     short int numberVertices;
+
+
 public:
     
     graph() 
@@ -86,7 +90,7 @@ public:
 
             }
         }
-        printf("\n##################################\n");
+        printf("\n##################################\n\n");
     }
 
     void display_matrix(){
@@ -167,11 +171,32 @@ public:
             j++;
         }
 
-            printf("voisins de %d\n",verticeNumber);
+        printf("voisins de %d\n",verticeNumber);
         for (i=0; i<numberNeighbor; i++){
             printf("%d ",neighbors[i]);
         }
         printf("\n");
+        return neighbors;
+    }
+
+    vertices get_neighbors_intersection(short int verticeNumber, vertices verticesToLook){
+        int i, j=0, numberNeighbor = get_number_neighbors(verticeNumber); // double boucle necessaire pour simplification de la fonction add_vertices dans vertices
+        vertices neighbors = vertices();
+        for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1)-1; i++)
+        {
+            if (adjacencyList[i] !=-1 && verticesToLook.contains(adjacencyList[i])) {
+                //neighbors.get_verticesList()[j]=adjacencyList[i];
+                neighbors.add_vertice(adjacencyList[i]);
+                j++;
+            }
+        }
+        
+        printf("voisins de %d\n",verticeNumber);
+        for (i=0; i<numberNeighbor; i++){
+            printf("%d-",neighbors.get_verticesList()[i]);
+        }
+        printf("### \n");
+        
         return neighbors;
     }
 
@@ -246,7 +271,30 @@ public:
         return cmpt;
     }
 
-    void BronKerbosch(vertices P, vertices R, vertices X, short int* cliquesMax){
+        
+    map <short int,vector<short int>> bron_kerbosch(){
+        map <short int,vector<short int>>cliquesMax;
+        /*
+        for (int i = 0; i < numberVertices; i++)
+        {
+            vector<short int> v (0, {});
+            cliqueMax.insert ( std::pair <short int,vector<short int>>(i,v) );
+        }
+        */
+        // for mettre cliquesMax a -1 partout
+        vertices P,R,X;
+        P = vertices();
+        R = vertices();
+        X = vertices();
+        int i;
+        for (i = 0; i <= numberVertices ; i++)
+            P.add_vertice(i);
+
+        bron_kerbosch_aux(P,R,X,cliquesMax);
+        return cliquesMax;
+    }
+
+    void bron_kerbosch_aux(vertices P, vertices R, vertices X, map <short int,vector<short int>> cliquesMax){
         /**
          * Conditions intiales :
          *  Mettre toutes les valeurs de cliquesMax/R/X a 0
@@ -262,6 +310,7 @@ public:
         int i;
         if (P.get_number_vertices() == 0 && X.get_number_vertices() == 0) // P et X sont vides
         {
+            /*
             int i;
             // on ajoute au tableau de cliquesMax le R trouve
             for (i = 0; i < MAX_VERTICES; i++)
@@ -274,27 +323,54 @@ public:
                     {
                         cliquesMax[(i * MAX_VERTICES) + j] = R.get_verticesList()[j];
                     }
-                    
                     return;
                 }
-            }            
+            }*/
+            // Ajouter R dans la map cliquesMax
+            R.display_vertices();
+            return;
+
         }
-        for (i = 0; i < numberVertices; i++) // Pour tout sommet v de P
+        for (i = 0; i < P.get_number_vertices(); i++) // Pour tout sommet v de P
         {
             short int v = P.get_verticesList()[i];
             // a finir =>
             ///printf("1 :");
+            // P.display_vertices();
+            vertices Rbis = R.cloneVertices();
+            Rbis.add_vertice(v);
+
+            vertices Pbis = vertices(); // -1
+            vertices intersection; // intersection de P et des voisins du sommet v
+            intersection = get_neighbors_intersection(v,P);
+            Pbis.add_vertices(intersection.get_verticesList(),intersection.get_number_vertices());
+
+            vertices Xbis = vertices();
+            intersection = get_neighbors_intersection(v,X); // intersection de X et des voisins du sommet v
+            Xbis.add_vertices(intersection.get_verticesList(),intersection.get_number_vertices());
+            /// printf("2 :");
+            /// P.display_vertices();
+
+            // DEBUG
+            /*
+            printf("v: %d\nR:",v);
+            Rbis.display_vertices();
+            printf("P:");
+            Pbis.display_vertices();
+            printf("X:");
+            Xbis.display_vertices();
+            printf("\n");
+            */
+            //sleep_for(milliseconds(500));
+            // FIN DEBUG
+            bron_kerbosch_aux(Pbis, Rbis, Xbis, cliquesMax);
+            /*
+            printf("v: %d\n",v);
             P.display_vertices();
-            P.add_vertices(get_neighbors(v),get_number_neighbors(v));
-            X.add_vertices(get_neighbors(v),get_number_neighbors(v));
-            R.add_vertice(v);
-            ///printf("2 :");
-            ///P.display_vertices();
-            BronKerbosch(P.cloneVertices(), R.cloneVertices(), X.cloneVertices(), cliquesMax);
+            P.display_vertices();
+            */
             P.del_vertice(v);
             X.add_vertice(v);
         }
     }
-
-
 };
