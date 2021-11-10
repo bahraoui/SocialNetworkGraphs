@@ -1,6 +1,15 @@
-#include "vertices.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <chrono>
+#include <thread>
 
 #define SIZE_SHORT_INT 2
+#define MAX_VERTICES 15
 
 using namespace std;
 using namespace std::this_thread; // sleep_for, sleep_until
@@ -19,202 +28,110 @@ using namespace std::chrono;
 class graph
 {
 private:
-    short int* adjacencyList;
-    short int totalDegree;
-    short int numberVertices;
-
+    map<int, vector<int>> adjancyList;
 
 public:
     
     graph() 
     {
-        int i;
-
-        totalDegree = 0;numberVertices = -1;
-
-        adjacencyList = (short int *)malloc((MAX_VERTICES * (MAX_VERTICES-1)) * sizeof(short int));
-
-        for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i++)
-            adjacencyList[i]= -2;
     }
 
     short int get_numberVertices(){
-        return numberVertices+1;
+        return 0;
     }
 
     short int get_totalDegree(){
+        int i, totalDegree;
+        for (i = 0; i < (int)(get_adjancyList().size()); i++) {
+           totalDegree += (int)(get_adjancyList()[i].size());
+        }
         return totalDegree;
     }
-
-    void free_graph(){
-        free(adjacencyList);
+    
+    map<int, vector<int>> get_adjancyList() {
+        return adjancyList;
     }
     
-    short int* get_adjacencyList() {
-        return adjacencyList;
-    }
-
-    //obselete fct
-    short int* get_actual_vertices(){
-        int cmpt=0,i;
-        short int* existingVertices = (short int*)malloc(MAX_VERTICES * sizeof(short int));
-        for (i = 0; i < MAX_VERTICES * (MAX_VERTICES-1); i+=(MAX_VERTICES-1))
-        {
-            if (adjacencyList[i] != -2)
-                existingVertices[cmpt]=1; // en c, 1 <=> true
-            else
-                existingVertices[cmpt]=0; // en c, 0 <=> false
-            cmpt++;
-        }
-        return existingVertices;
-    }
 
     /**
      * Affiche le graphe 
     */
+
     void display_graph(){
         int i,j;
         printf("\nAffichage du graphe via liste d'adjacence (%d sommets possibles): \n##################################\n\n",MAX_VERTICES);
-        short int* existingVertices = get_actual_vertices();
-        for (i = 0; i < MAX_VERTICES; i++)
+        for (i = 0; i < (int)(adjancyList.size()); i++)
         {
-            if (existingVertices[i]) // on verifie si le sommet i existe bien
+            for (j = 0; j < (int)(adjancyList[i].size());j++)
             {
-                printf("Voisins du sommet %d : ",i);
-                
-                for (j = 0; j <(MAX_VERTICES-1); j++)
-                    if (adjacencyList[(i * (MAX_VERTICES - 1)) + j] != -1)
-                        printf("%d  ",adjacencyList[(i * (MAX_VERTICES - 1)) + j]);
-                // printf("  ///i=%d,j=%d///\n",i,j); // ligne a utiliser pour debug cette methode
-                printf("\n");
-
+                printf(" %d ", adjancyList[i][j]);
             }
+            printf("\n");
         }
         printf("\n##################################\n\n");
     }
 
-    void display_matrix(){
-        int i,j;
-        printf("\n\n##################################\n\n");
-        for (i = 0; i < MAX_VERTICES; i++)
-        {              
-            printf("%d => ",i);  
-            for (j = 0; j <(MAX_VERTICES-1); j++)
-                printf("%d  ",adjacencyList[(i * (MAX_VERTICES - 1)) + j]);
-            // printf("  ///i=%d,j=%d///\n",i,j); // ligne a utiliser pour debug cette methode
-            printf("\n");
+    void add_vertice(int numberVerticeToAdd){
+        int i;
+        for (i = 0; i < numberVerticeToAdd; i++) {
+            vector<int> v (0, {});
+            adjancyList.insert(pair<int, vector<int>>(i, v));
         }
-        printf("\n##################################\n");
-    }
-
-    bool add_vertice(int numberVerticeToAdd){
-        int i, j;
-        for (j = 0; j < numberVerticeToAdd; j++)
-        {
-            if(numberVertices + 1 < MAX_VERTICES)
-            {
-                numberVertices += 1;
-                for (i = numberVertices*(MAX_VERTICES-1); i < (numberVertices+1)*(MAX_VERTICES-1); i++)
-                    adjacencyList[i]=-1;
-            }
-            else 
-                return false;  
-        }
-        return true;    
+        
     }
 
     bool add_edge(short int verticeSrc, short int verticeDest){
-        short int i;
         if (verticeDest==verticeSrc || verticeDest < 0 || verticeSrc < 0 || verticeDest >= MAX_VERTICES || verticeSrc >= MAX_VERTICES)
             return false; // les valeurs donnees sont incorrects
-        if (adjacencyList[verticeSrc*(MAX_VERTICES-1)] == -2 || adjacencyList[verticeDest*(MAX_VERTICES-1)] == -2)
-            return false; // le cas ou au moins un des deux sommets n'existe pas
         
-        for (i = 0; i < MAX_VERTICES-1; i++)
-            if (adjacencyList[(verticeSrc * (MAX_VERTICES-1)) + i] == verticeDest)
-                return true; // false ou true ? // le cas ou il existe deja une arrete entre les deux sommets
-        for (i = 0; i < MAX_VERTICES-1; i++)
-        {
-            if (adjacencyList[(verticeSrc * (MAX_VERTICES-1)) + i] == -1) // recherche d'une place "libre" pour inserer le voisiin
-            {
-                adjacencyList[(verticeSrc * (MAX_VERTICES-1)) + i] = verticeDest;
-                for (i = 0; i < MAX_VERTICES-1; i++)
-                {
-                    if (adjacencyList[(verticeDest * (MAX_VERTICES-1)) + i] == -1) // idem
-                    {
-                        adjacencyList[(verticeDest * (MAX_VERTICES-1)) + i] = verticeSrc;
-                        totalDegree += 2;
-                        return true;
-                    }
-                }
-            }
-        }
+        adjancyList[verticeSrc].push_back(verticeDest);
+        adjancyList[verticeDest].push_back(verticeSrc);
+
         return false;
     }
 
+    
     int get_number_neighbors(short int verticeNumber) {
         int i, numberNeighbors = 0;
 
-        for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1)-1; i++)
-            if (adjacencyList[i] !=-1)
-                numberNeighbors++;
+        for (i = 0; i < (int)(get_adjancyList()[verticeNumber].size()); i++)
+            numberNeighbors++;
 
         return numberNeighbors;
     }
 
-    short int* get_neighbors(short int verticeNumber){
-        int i, j=0, numberNeighbor = get_number_neighbors(verticeNumber); // double boucle necessaire pour simplification de la fonction add_vertices dans vertices
-        short int* neighbors = (short int*)malloc(numberNeighbor*sizeof(short int));
-        for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1); i++)
-        if (adjacencyList[i] !=-1) {
-            neighbors[j]=adjacencyList[i];
-            j++;
-        }
-        /*
-        printf("voisins de %d\n",verticeNumber);
-        for (i=0; i<numberNeighbor; i++){
-            printf("%d ",neighbors[i]);
-        }
-        printf("\n");*/
+    
+
+    vector<short int> get_neighbors(short int verticeNumber){
+        int i;
+        vector<short int> neighbors = {};
+        for (i = 0; i < (int)(get_adjancyList()[verticeNumber].size()) ; i++)
+            neighbors.push_back(get_adjancyList()[verticeNumber][i]);
         return neighbors;
     }
 
-    vertices get_neighbors_intersection(short int verticeNumber, vertices verticesToLook){
+    
+
+    vector<short int> get_neighbors_intersection(short int verticeNumber, vector<short int> verticesToLook){
         int i;
-        vertices neighbors = vertices();
-        for (i = verticeNumber*(MAX_VERTICES-1); i < (verticeNumber+1)*(MAX_VERTICES-1); i++)
+        vector<short int> neighbors;
+        for (i = 0; i < (int)(get_adjancyList()[verticeNumber].size()) ; i++)
         {
-            if (adjacencyList[i] != -1 && verticesToLook.contains(adjacencyList[i])) {
-                //neighbors.get_verticesList()[j]=adjacencyList[i];
-                neighbors.add_vertice(adjacencyList[i]);
+            if (count(verticesToLook.begin(), verticesToLook.end(), get_adjancyList()[verticeNumber][i])) {
+                neighbors.push_back(get_adjancyList()[verticeNumber][i]);
             }
         }
-        
-        // neighbors.display_vertices();
-        
+                
         return neighbors;
     }
 
+    
+
     bool is_graph_valid() {
-        if (totalDegree > 0){
+        if ((int)(get_adjancyList().size()) > 0){
             return true;
         }
         return false;
-    }
-
-    bool is_clique() {
-        //si le graphe comporte plus de deux sommets
-        //chaque sommet est lié a tout les autres = complet
-        int i;
-
-        if (numberVertices < 2){
-            return false;
-        }
-        for (i = 0; i < numberVertices; i++)
-            if (get_number_neighbors(i) != MAX_VERTICES-1) 
-                return false;
-        
-        return true;
     }
 
     bool result_probability(float probability) {
@@ -240,11 +157,11 @@ public:
 
         //graphe n sommet + 1 noeud sans arrete
 
-        while (m > 0 && i < numberVertices-1) {
+        while (m > 0 && i < (int)(get_adjancyList().size())-1) {
             //calcul proba
-            barabasiAlbertProbability = (float)get_number_neighbors(i)/totalDegree;
+            barabasiAlbertProbability = (float)get_number_neighbors(i)/get_totalDegree();
             if (result_probability(barabasiAlbertProbability)) {
-                add_edge(numberVertices,i);
+                add_edge((int)(get_adjancyList().size()),i);
                 m--;
             }
             i++;
@@ -256,156 +173,107 @@ public:
         if (probability < 0.0001 || probability > 0.9999) // on verifie que la proba donnee est correcte
             return false;
         //display_matrix();
-        for (i = 0; i <= numberVertices; i++) // chaque sommet existant
+        for (i = 0; i < (int)(get_adjancyList().size()); i++) // chaque sommet existant
         {
-            for (j = (i+1); j <=(numberVertices);  j++) { // chaque voisin du sommet i
-                if (adjacencyList[(i * (numberVertices -1)) + j] == -1 && result_probability(probability))
+            for (j = 0; j < (int)(get_adjancyList()[i].size());  j++) { // chaque voisin du sommet i
+                if (result_probability(probability))
                     add_edge(i,j);
             }
         }
         return cmpt;
     }
 
-    void bron_kerbosch_aux(vertices P, vertices R, vertices X, map <short int,vector<short int>> cliquesMax){
-        int i;
-        if (P.get_number_vertices() == 0 && X.get_number_vertices() == 0) // P et X sont vides
-        {
-            // Ajouter R dans la map cliquesMax
-            // R.display_vertices();
-
-        }
-        for (i = 0; i < P.get_number_vertices(); i++) // Pour tout sommet v de P
-        {
-            short int v = P.get_verticesList()[0];
-            // a finir =>
-            ///printf("1 :");
-            // P.display_vertices();
-            vertices Rbis = R.cloneVertices();
-            Rbis.add_vertice(v);
-
-            vertices Pbis = vertices(); // -1
-            vertices intersection; // intersection de P et des voisins du sommet v
-            intersection = get_neighbors_intersection(v,P);
-            Pbis.add_vertices(intersection.get_verticesList(),intersection.get_number_vertices());
-
-            vertices Xbis = vertices();
-            intersection = get_neighbors_intersection(v,X); // intersection de X et des voisins du sommet v
-            Xbis.add_vertices(intersection.get_verticesList(),intersection.get_number_vertices());
-            /// printf("2 :");
-            /// P.display_vertices();
-
-            // DEBUG
-
-             printf("\n###tg######\n");
-            
-            short int* voisins = get_neighbors(v);
-            printf("voisins :");
-            vertices voisinsV = vertices();
-            voisinsV.add_vertices(voisins,get_number_neighbors(v));
-            voisinsV.display_vertices();
-            printf("P:");
-            P.display_vertices();
-
-            printf("#########\n");
-
-            printf("v: %d\nR:",v+1);
-            Rbis.display_vertices();
-            printf("P:");
-            Pbis.display_vertices();
-            printf("X:");
-            Xbis.display_vertices();
-            printf("\n");
-            
-            //sleep_for(milliseconds(500));
-            // FIN DEBUG
-            bron_kerbosch_aux(Pbis, Rbis, Xbis, cliquesMax);
-            /*
-            printf("v: %d\n",v);
-            P.display_vertices();
-            P.del_vertice(v);
-            P.display_vertices();
-            */
-            P.del_vertice(v);
-            X.add_vertice(v);
+    void pop_front(vector<short int> &v)
+    {
+        if (v.size() > 0) {
+            v.erase(v.begin());
         }
     }
 
-
+    
     map <short int,vector<short int>> bron_kerbosch(){
         map <short int,vector<short int>>cliquesMax;
-        vertices P;
-        vertices R;
-        vertices X;
-        P = vertices();
-        R = vertices();
-        X = vertices();
+        vector<short int> P = {}, R = {}, X = {};
         int i;
-        for (i = 0; i <= numberVertices ; i++) // on remplit P avec les sommets du graphe
-            P.add_vertice(i);
+        for (i = 0; i < (int)(get_adjancyList().size()) ; i++) // on remplit P avec les sommets du graphe
+            P.push_back(i);
 
-        TBK(P,R,X,cliquesMax);
+        printf("Initialisation \n [");
+            for(i = 0; i < (int)(P.size()); i++)
+                printf(" %d ",P[i]);
+            printf("]\n\n");
+
+        bron_kerbosch_aux(P,R,X,cliquesMax);
         return cliquesMax; // toutes les cliques ùaximales
     }
 
-
-    void TBK(vertices P, vertices R, vertices X, map <short int,vector<short int>> cliquesMAX){
-        if (P.get_number_vertices() == 0 && X.get_number_vertices() ==0 )
+    void bron_kerbosch_aux(vector<short int> P, vector<short int> R, vector<short int> X, map <short int,vector<short int>> cliquesMAX){
+        if (P.empty() && X.empty() )
         {
-            R.display_vertices();
+            printf("Clique MAX trouve : [");
+            for(int i = 0; i < (int)(R.size()); i++)
+                printf(" %d ",R[i]);
+            printf("]\n\n");
+            //return;
         }
 
-        for (int i = 0; i < P.get_number_vertices(); i++) // Pour chaque sommet v de P
+        for (int i = 0; i < (int)(P.size()); i++) // Pour chaque sommet v de P
         {
-            short int v = P.get_verticesList()[0]; // v <=> P[sommet]
+            short int v = P[0]; // v <=> P[sommet]
 
-            vertices Pinter = get_neighbors_intersection(v,P);
+            printf("Sommet V CHOISIS : %d -- P[0]  %d -- Indice i : %d \n\n", v,P[0],  i);
 
-            vertices Runion = R.cloneVertices();
-            Runion.add_vertice(v);
+            vector<short int> Pinter = {}, Runion = {}, Xinter = {}, neighbors = {};
 
-            vertices Xinter = get_neighbors_intersection(v,X);
+            neighbors = get_neighbors(v);
 
-            TBK(Pinter,Runion,Xinter,cliquesMAX);
+            printf("VOISINS DE %d : ",v);
+            printf("[");
+            for(i = 0; i < (int)(neighbors.size()); i++)
+                printf(" %d ",neighbors[i]);
+            printf("]\n");
 
-            P.del_vertice(v);
-            X.add_vertice(v);
+            for (int j = 0; j < (int)(neighbors.size()); j++)
+            {   //adjancyList[j] => voisins de v
+
+                if (count(P.begin(), P.end(), neighbors[j])) {
+                    Pinter.push_back(neighbors[j]);
+                }
+                if (count(X.begin(), X.end(), neighbors[j])) {
+                    Xinter.push_back(neighbors[j]);
+                }                    
+            }
+            
+            //Pinter = get_neighbors_intersection(v,P);
+
+            Runion = R;
+            Runion.push_back(v);
+
+            //Xinter = get_neighbors_intersection(v,X);
+
+            printf("P : ");
+            printf("[");
+            for(i = 0; i < (int)(Pinter.size()); i++)
+                printf(" %d ",Pinter[i]);
+            printf("]\n");
+
+            printf("R : ");
+            printf("[");
+            for(i = 0; i < (int)(Runion.size()); i++)
+                printf(" %d ",Runion[i]);
+            printf("]\n");
+
+            printf("X : ");
+            printf("[");
+            for(i = 0; i < (int)(Xinter.size()); i++)
+                printf(" %d ",Xinter[i]);
+            printf("]\n\n");
+
+            bron_kerbosch_aux(Pinter,Runion,Xinter,cliquesMAX);
+
+            pop_front(P);
+            X.push_back(v);
         }
         
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
