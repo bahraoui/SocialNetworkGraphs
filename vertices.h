@@ -106,13 +106,18 @@ vertices vertices::cloneVertices(){
 }
 
 void vertices::display_vertices(){
-    printf("%d : [",this->numberOfVerticesInList);
+    printf("(size : %d) : [",this->numberOfVerticesInList);
     int i;
     for (i = 0; i < MAX_VERTICES-1; i++)
     {
-        printf("%d, ",this->verticesList[i]);
+        if (this->verticesList[i] != -1)
+        {
+            printf("%d, ",this->verticesList[i]+1);
+        }
     }
-    printf("%d",this->verticesList[MAX_VERTICES-1]);
+    if (this->verticesList[MAX_VERTICES-1] != -1){
+        printf("%d",this->verticesList[MAX_VERTICES-1]);
+    }
     printf("]\n");
 }
 

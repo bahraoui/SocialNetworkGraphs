@@ -4,7 +4,7 @@
 int main() 
 {
     srand(time(NULL));
-    int i,j;
+    int i;
     graph mama = graph();
     /*
     int moyenne=0,i,nbessais=1;
@@ -26,10 +26,22 @@ int main()
     mama.add_edge(1,3);
     mama.display_graph();
 
+    map <short int,vector<short int>>cliquesMax;
+    vertices P;
+    vertices R;
+    vertices X;
+    P = vertices();
+    R = vertices();
+    X = vertices();
+    for (i = 0; i < mama.get_numberVertices() ; i++) // on remplit P avec les sommets du graphe
+        P.add_vertice(i);
 
-    mama.bron_kerbosch();
-    
-    
+
+    mama.bron_kerbosch_aux(P,R,X,cliquesMax);
+
+    //mama.bron_kerbosch();
+
+
    /* 
     // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices
     vertices R;
