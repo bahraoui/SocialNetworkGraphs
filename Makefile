@@ -1,7 +1,7 @@
 CC=g++
 OPT=-Wall
 FILES=graph.cpp graph.h
-EXE=graph
+EXE=graph.out
 
 all: graph.h
 	clear

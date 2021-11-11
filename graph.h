@@ -87,7 +87,7 @@ public:
         adjancyList[verticeSrc].push_back(verticeDest);
         adjancyList[verticeDest].push_back(verticeSrc);
 
-        return false;
+        return true;
     }
 
     
@@ -218,39 +218,54 @@ public:
         }
 
         for (int i = 0; i < (int)(P.size()); i++) // Pour chaque sommet v de P
-        {
-            short int v = P[0]; // v <=> P[sommet]
+        { // v <=> P[sommet]
 
-            printf("Sommet V CHOISIS : %d -- P[0]  %d -- Indice i : %d \n\n", v,P[0],  i);
+            printf("Sommet V CHOISIS : %d ---- Indice i : %d \n\n", P[0],  i);
 
             vector<short int> Pinter = {}, Runion = {}, Xinter = {}, neighbors = {};
 
-            neighbors = get_neighbors(v);
-
-            printf("VOISINS DE %d : ",v);
+            neighbors = get_neighbors(P[0]);
+            auto neighborsIterator = adjancyList.find(P[0]);
+/*
+            printf("VOISINS DE %d : ",P[0]);
             printf("[");
-            for(int j = 0; j < (int)(neighbors.size()); j++)
-                printf(" %d ",neighbors[j]);
+            for(int j = 0; j < (int)(neighborsIterator->second.size()); j++)
+                printf(" %d ",neighborsIterator->second[j]);
             printf("]\n");
-
-            for (int j = 0; j < (int)(neighbors.size()); j++)
+*/
+            for (int j = 0; j < (int)(neighborsIterator->second.size()); j++)
             {   //adjancyList[j] => voisins de v
-
-                if (count(P.begin(), P.end(), neighbors[j])) {
-                    Pinter.push_back(neighbors[j]);
+/*
+                if (count(P.begin(), P.end(), neighborsIterator->second[j])) {
+                    Pinter.push_back(neighborsIterator->second[j]);
                 }
-                if (count(X.begin(), X.end(), neighbors[j])) {
-                    Xinter.push_back(neighbors[j]);
-                }                    
+                if (count(X.begin(), X.end(), neighborsIterator->second[j])) {
+                    Xinter.push_back(neighborsIterator->second[j]);
+                }*/
+                
+                for (long unsigned int k = 0; k < P.size(); k++)
+                {
+                    if (P[k] == neighborsIterator->second[j]){
+                        Pinter.push_back(P[k]);
+                    }
+                }
+
+                // Création de l'intersection X
+                for (long unsigned int k = 0; k < X.size(); k++)
+                {
+                    if (neighborsIterator->second[j] == X[k]){
+                        Xinter.push_back(X[k]);
+                    }
+                }               
             }
             
             //Pinter = get_neighbors_intersection(v,P);
 
             Runion = R;
-            Runion.push_back(v);
+            Runion.push_back(P[0]);
 
             //Xinter = get_neighbors_intersection(v,X);
-
+/*
             printf("P : ");
             printf("[");
             for(int j = 0; j < (int)(Pinter.size()); j++)
@@ -268,11 +283,11 @@ public:
             for(int j = 0; j < (int)(Xinter.size()); j++)
                 printf(" %d ",Xinter[j]);
             printf("]\n\n");
-
+*/
             bron_kerbosch_aux(Pinter,Runion,Xinter,cliquesMAX);
 
-            P.erase(P.begin());
             X.push_back(P[0]);
+            P.erase(P.begin());
         }
         
     }

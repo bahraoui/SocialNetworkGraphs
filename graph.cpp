@@ -18,11 +18,22 @@ int main()
     }
     printf("essais : %d\nmoyenne : %f\n",nbessais,((float)moyenne/nbessais));
     */
+   /*
+   a 0
+   b 1
+   c 
+   d 2
+   e 1
+   f 0
+   */
+
     mama.add_vertice(4);
     mama.add_edge(0,1);
-    mama.add_edge(1,2);
     mama.add_edge(2,0);
+    mama.add_edge(1,2);
     mama.add_edge(1,3);
+
+
     mama.display_graph();
 
     mama.bron_kerbosch();
