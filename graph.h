@@ -199,9 +199,9 @@ public:
             P.push_back(i);
 
         printf("Initialisation \n [");
-            for(i = 0; i < (int)(P.size()); i++)
-                printf(" %d ",P[i]);
-            printf("]\n\n");
+        for(i = 0; i < (int)(P.size()); i++)
+            printf(" %d ",P[i]);
+        printf("]\n\n");
 
         bron_kerbosch_aux(P,R,X,cliquesMax);
         return cliquesMax; // toutes les cliques ùaximales
@@ -229,8 +229,8 @@ public:
 
             printf("VOISINS DE %d : ",v);
             printf("[");
-            for(i = 0; i < (int)(neighbors.size()); i++)
-                printf(" %d ",neighbors[i]);
+            for(int j = 0; j < (int)(neighbors.size()); j++)
+                printf(" %d ",neighbors[j]);
             printf("]\n");
 
             for (int j = 0; j < (int)(neighbors.size()); j++)
@@ -253,26 +253,26 @@ public:
 
             printf("P : ");
             printf("[");
-            for(i = 0; i < (int)(Pinter.size()); i++)
-                printf(" %d ",Pinter[i]);
+            for(int j = 0; j < (int)(Pinter.size()); j++)
+                printf(" %d ",Pinter[j]);
             printf("]\n");
 
             printf("R : ");
             printf("[");
-            for(i = 0; i < (int)(Runion.size()); i++)
-                printf(" %d ",Runion[i]);
+            for(int j = 0; j < (int)(Runion.size()); j++)
+                printf(" %d ",Runion[j]);
             printf("]\n");
 
             printf("X : ");
             printf("[");
-            for(i = 0; i < (int)(Xinter.size()); i++)
-                printf(" %d ",Xinter[i]);
+            for(int j = 0; j < (int)(Xinter.size()); j++)
+                printf(" %d ",Xinter[j]);
             printf("]\n\n");
 
             bron_kerbosch_aux(Pinter,Runion,Xinter,cliquesMAX);
 
-            pop_front(P);
-            X.push_back(v);
+            P.erase(P.begin());
+            X.push_back(P[0]);
         }
         
     }
