@@ -217,14 +217,16 @@ public:
             //return;
         }
 
-        for (int i = 0; i < (int)(P.size()); i++) // Pour chaque sommet v de P
+        vector<short int> Ploop = P;
+
+        for (int i = 0; i < (int)(Ploop.size()); i++) // Pour chaque sommet v de P
         { // v <=> P[sommet]
 
             printf("Sommet V CHOISIS : %d ---- Indice i : %d \n\n", P[0],  i);
 
             vector<short int> Pinter = {}, Runion = {}, Xinter = {}, neighbors = {};
 
-            neighbors = get_neighbors(P[0]);
+            neighbors = get_neighbors(Ploop[0]);
             auto neighborsIterator = adjancyList.find(P[0]);
 /*
             printf("VOISINS DE %d : ",P[0]);
