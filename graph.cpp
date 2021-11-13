@@ -27,7 +27,7 @@ int main()
    f 0
    */
 
-    mama.add_vertice(6);
+    /*mama.add_vertice(6);
     mama.add_edge(1,0);
     mama.add_edge(1,2);
     mama.add_edge(2,3);
@@ -37,7 +37,13 @@ int main()
     mama.add_edge(4,2);
     mama.add_edge(5,2);
     mama.add_edge(4,3);
-    mama.add_edge(5,4);
+    mama.add_edge(5,4);*/
+
+    mama.add_vertice(4);
+    mama.add_edge(0,1);
+    mama.add_edge(0,2);
+    mama.add_edge(1,3);
+    mama.add_edge(1,2);
 
 
     mama.display_graph();

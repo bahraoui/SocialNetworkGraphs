@@ -91,12 +91,7 @@ public:
 
     
     int get_number_neighbors(short int verticeNumber) {
-        int numberNeighbors = 0;
-
-        for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size(); i++)
-            numberNeighbors++;
-
-        return numberNeighbors;
+        return get_adjancyList()[verticeNumber].size();
     }
 
     
@@ -247,7 +242,6 @@ public:
     }
 
 
-
     map <short int,vector<short int>> bron_kerbosch_pivot(){
         map <short int,vector<short int>>cliquesMax;
         vector<short int> P = {}, R = {}, X = {};
@@ -276,6 +270,7 @@ public:
 
         //choose a pivot u ∈ P∪X
         short int u = choose_bron_kerbosh_pivot(P,X);
+        printf("CHOIX DE U : %d\n",u);
         auto uNeighbors = adjancyList.find(u);
 
         vector<short int> Ploop;
@@ -319,13 +314,24 @@ public:
     }
 
     short int choose_bron_kerbosh_pivot(vector<short int> P, vector<short int> X) {
-        
-        if (!P.empty()) {
-            return P[0];
+        vector<short int> neighbors = {};
+        int max = -1, actual;
+        short int u;
+        for (long unsigned int i = 0; i < P.size(); i++)
+        {
+            actual = get_neighbors_intersection(P[i],P).size();
+            if (actual > max) {
+                max = actual; u = P[i];
+            }
         }
-        else if (!X.empty()) {
-            return X[0];
+        for (long unsigned int i = 0; i < X.size(); i++)
+        {   
+            actual = get_neighbors_intersection(X[i],X).size();
+            if (actual > max) {
+                max = actual; u = X[i];
+            }
         }
-        return -1;
+
+        return u;
     }
 };
