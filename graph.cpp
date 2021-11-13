@@ -44,6 +44,7 @@ int main()
 
     mama.bron_kerbosch_pivot();
 
+
    /* 
     // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices
     vertices R;

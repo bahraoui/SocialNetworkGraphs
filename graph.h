@@ -274,17 +274,17 @@ public:
             return;
         }
 
-        //choose a pivot u ∈P ∪X
+        //choose a pivot u ∈ P∪X
         short int u = choose_bron_kerbosh_pivot(P,X);
         auto uNeighbors = adjancyList.find(u);
 
-        vector<short int> Ploop = P;
+        vector<short int> Ploop;
 
-        for (long unsigned int i = 0; i < uNeighbors->second.size(); i++)
+        for (long unsigned int i = 0; i < P.size(); i++)
         {   
             // Création de l'intersection Ploop             
-            if (count(Ploop.begin(), Ploop.end(), uNeighbors->second[i])) {
-                remove(Ploop.begin(),Ploop.end(),uNeighbors->second[i]);
+            if (!count(uNeighbors->second.begin(), uNeighbors->second.end(), P[i])) {
+                Ploop.push_back(P[i]);
             }  
         }
 
@@ -320,20 +320,11 @@ public:
 
     short int choose_bron_kerbosh_pivot(vector<short int> P, vector<short int> X) {
         
-        if (!P.empty() && !X.empty()) {
-            for (long unsigned int i = 0; i < P.size(); i++)
-            {                  
-                if (count(X.begin(), X.end(), P[i])) {
-                    return P[i];
-                }     
-            }
+        if (!P.empty()) {
             return P[0];
         }
-        else if (P.empty() && !X.empty()) {
+        else if (!X.empty()) {
             return X[0];
-        }
-        else if (!P.empty() && X.empty()) {
-            return P[0];
         }
         return -1;
     }
