@@ -39,16 +39,69 @@ int main()
     mama.add_edge(4,3);
     mama.add_edge(5,4);*/
 
-    mama.add_vertice(4);
+    /*mama.add_vertice(4);
     mama.add_edge(0,1);
     mama.add_edge(0,2);
     mama.add_edge(1,3);
+    mama.add_edge(1,2);*/
+
+    /*
+   a 0
+   b 1
+   c 2
+   d 3
+   e 4
+   f 5
+   g 6
+   h 7
+   i 8
+   */
+
+    mama.add_vertice(9);
+    mama.add_edge(0,1);
+
     mama.add_edge(1,2);
+    mama.add_edge(1,3);
+    mama.add_edge(1,4);
+    mama.add_edge(1,6);
+
+    mama.add_edge(2,4);
+    mama.add_edge(2,8);
+    mama.add_edge(2,5);
+
+    mama.add_edge(3,4);
+    mama.add_edge(3,7);
+    mama.add_edge(3,8);
+
+    mama.add_edge(4,5);
+    mama.add_edge(4,6);
+    mama.add_edge(4,7);
+    mama.add_edge(4,8);
+
+    mama.add_edge(5,7);
+
+    mama.add_edge(6,8);
+
+    mama.add_edge(7,8);
 
 
     mama.display_graph();
 
-    mama.bron_kerbosch_pivot();
+
+
+
+
+    /*printf("Tri : [");
+    for(long unsigned int i = 0; i < ascendingVertices.size(); i++)
+        printf(" %d ",ascendingVertices[i]);
+    printf("]\n\n");*/
+
+    vector<short int> adjancyOrder = mama.find_degeneracy_order();
+    printf("Ordre d'adjacence : [");
+    for(long unsigned int i = 0; i < adjancyOrder.size(); i++)
+        printf(" %d ",adjancyOrder[i]);
+    printf("]\n\n");
+    //mama.bron_kerbosch_pivot();
 
 
    /* 

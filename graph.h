@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 #define SIZE_SHORT_INT 2
 #define MAX_VERTICES 15
@@ -58,12 +59,13 @@ public:
     */
 
     void display_graph(){
-        printf("\nAffichage du graphe via liste d'adjacence (%d sommets possibles): \n##################################\n\n",MAX_VERTICES);
-        for (long unsigned int i = 0; i < adjancyList.size(); i++)
-        {
-            for (long unsigned int j = 0; j < adjancyList[i].size();j++)
+        printf("##################################\n\n");
+        map<int, vector<int>>::iterator it;
+
+        for (it = adjancyList.begin(); it != adjancyList.end(); it++) {
+            for (long unsigned int j = 0; j < it->second.size();j++)
             {
-                printf(" %d ", adjancyList[i][j]);
+                printf(" %d ", it->second[j]);
             }
             printf("\n");
         }
@@ -262,7 +264,7 @@ public:
         if (P.empty() && X.empty() )
         {
             printf("Clique MAX trouve : [");
-            for(int i = 0; i < (int)(R.size()); i++)
+            for(long unsigned int i = 0; i < R.size(); i++)
                 printf(" %d ",R[i]);
             printf("]\n\n");
             return;
@@ -333,5 +335,57 @@ public:
         }
 
         return u;
+    }
+
+    //Ordre de degenerescence
+    vector<short int> ascending_edges() {
+        vector<short int> ascendingEdges = {};
+        short int v;
+        map<int, vector<int>>::iterator it;
+
+        for (it = adjancyList.begin(); it != adjancyList.end(); it++)
+        {
+            ascendingEdges.push_back(it->first);
+        }
+
+        for (long unsigned int i = 0; i < ascendingEdges.size(); i++)
+        {
+            for (long unsigned int j = 0; j < ascendingEdges.size(); j++)
+            {
+                if (get_number_neighbors(ascendingEdges[i]) < get_number_neighbors(ascendingEdges[j])) {
+                    v = ascendingEdges[i];
+                    ascendingEdges[i] = ascendingEdges[j];
+                    ascendingEdges[j] = v;
+                }
+            }       
+        }
+        return ascendingEdges;
+    }
+
+    //Ordre de degenerescence
+    vector<short int> find_degeneracy_order() {
+        vector<short int> ascendingEdges = ascending_edges();
+        vector<short int> degeneracyOrder = {};
+        graph gCopy = *(this);
+        long unsigned int maxSize = ascendingEdges.size();
+
+        for (long unsigned int i = 0; i < maxSize; i++)
+        {
+            degeneracyOrder.push_back(ascendingEdges[0]);
+            gCopy.delete_vertice(ascendingEdges[0]);
+            ascendingEdges = gCopy.ascending_edges();
+        } 
+        return degeneracyOrder;      
+    }
+
+    void delete_vertice(short int vertice) {
+        vector<short int> neighbors = get_neighbors(vertice);
+
+        for (long unsigned int i = 0; i < neighbors.size(); i++)
+            for (long unsigned int j = 0; j < adjancyList[neighbors[i]].size(); j++) 
+                if (adjancyList[neighbors[i]][j] == vertice)
+                    adjancyList[neighbors[i]].erase(adjancyList[neighbors[i]].begin()+j);
+        
+        adjancyList.erase(vertice);  
     }
 };
