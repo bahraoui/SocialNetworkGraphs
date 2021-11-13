@@ -41,8 +41,8 @@ public:
     }
 
     short int get_totalDegree(){
-        int i, totalDegree;
-        for (i = 0; i < (int)(get_adjancyList().size()); i++) {
+        int totalDegree;
+        for (long unsigned int i = 0; i < get_adjancyList().size(); i++) {
            totalDegree += (int)(get_adjancyList()[i].size());
         }
         return totalDegree;
@@ -58,11 +58,10 @@ public:
     */
 
     void display_graph(){
-        int i,j;
         printf("\nAffichage du graphe via liste d'adjacence (%d sommets possibles): \n##################################\n\n",MAX_VERTICES);
-        for (i = 0; i < (int)(adjancyList.size()); i++)
+        for (long unsigned int i = 0; i < adjancyList.size(); i++)
         {
-            for (j = 0; j < (int)(adjancyList[i].size());j++)
+            for (long unsigned int j = 0; j < adjancyList[i].size();j++)
             {
                 printf(" %d ", adjancyList[i][j]);
             }
@@ -92,9 +91,9 @@ public:
 
     
     int get_number_neighbors(short int verticeNumber) {
-        int i, numberNeighbors = 0;
+        int numberNeighbors = 0;
 
-        for (i = 0; i < (int)(get_adjancyList()[verticeNumber].size()); i++)
+        for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size(); i++)
             numberNeighbors++;
 
         return numberNeighbors;
@@ -103,9 +102,8 @@ public:
     
 
     vector<short int> get_neighbors(short int verticeNumber){
-        int i;
         vector<short int> neighbors = {};
-        for (i = 0; i < (int)(get_adjancyList()[verticeNumber].size()) ; i++)
+        for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size() ; i++)
             neighbors.push_back(get_adjancyList()[verticeNumber][i]);
         return neighbors;
     }
@@ -113,9 +111,8 @@ public:
     
 
     vector<short int> get_neighbors_intersection(short int verticeNumber, vector<short int> verticesToLook){
-        int i;
         vector<short int> neighbors;
-        for (i = 0; i < (int)(get_adjancyList()[verticeNumber].size()) ; i++)
+        for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size() ; i++)
         {
             if (count(verticesToLook.begin(), verticesToLook.end(), get_adjancyList()[verticeNumber][i])) {
                 neighbors.push_back(get_adjancyList()[verticeNumber][i]);
@@ -147,7 +144,7 @@ public:
             return;
         }
 
-        int i = 0;
+        long unsigned int i = 0;
         float barabasiAlbertProbability;
 
         //graphe n sommet
@@ -157,7 +154,7 @@ public:
 
         //graphe n sommet + 1 noeud sans arrete
 
-        while (m > 0 && i < (int)(get_adjancyList().size())-1) {
+        while (m > 0 && i < get_adjancyList().size()-1) {
             //calcul proba
             barabasiAlbertProbability = (float)get_number_neighbors(i)/get_totalDegree();
             if (result_probability(barabasiAlbertProbability)) {
@@ -169,13 +166,13 @@ public:
     }
 
     bool random_graph(float probability){
-        int i,j,cmpt=0;
+        int cmpt=0;
         if (probability < 0.0001 || probability > 0.9999) // on verifie que la proba donnee est correcte
             return false;
         //display_matrix();
-        for (i = 0; i < (int)(get_adjancyList().size()); i++) // chaque sommet existant
+        for (long unsigned int i = 0; i < get_adjancyList().size(); i++) // chaque sommet existant
         {
-            for (j = 0; j < (int)(get_adjancyList()[i].size());  j++) { // chaque voisin du sommet i
+            for (long unsigned int j = 0; j < get_adjancyList()[i].size();  j++) { // chaque voisin du sommet i
                 if (result_probability(probability))
                     add_edge(i,j);
             }
@@ -194,12 +191,12 @@ public:
     map <short int,vector<short int>> bron_kerbosch(){
         map <short int,vector<short int>>cliquesMax;
         vector<short int> P = {}, R = {}, X = {};
-        int i;
-        for (i = 0; i < (int)(get_adjancyList().size()) ; i++) // on remplit P avec les sommets du graphe
+
+        for (long unsigned int i = 0; i < get_adjancyList().size() ; i++) // on remplit P avec les sommets du graphe
             P.push_back(i);
 
         printf("Initialisation \n [");
-        for(i = 0; i < (int)(P.size()); i++)
+        for(long unsigned int i = 0; i < P.size(); i++)
             printf(" %d ",P[i]);
         printf("]\n\n");
 
@@ -219,77 +216,32 @@ public:
 
         vector<short int> Ploop = P;
 
-        for (int i = 0; i < (int)(Ploop.size()); i++) // Pour chaque sommet v de P
-        { // v <=> P[sommet]
+        for (long unsigned int i = 0; i < Ploop.size(); i++) // Pour chaque sommet v de P
+        {
+            vector<short int> Pinter = {}, Runion = {}, Xinter = {};
 
-            printf("Sommet V CHOISIS : %d ---- Indice i : %d \n\n", P[0],  i);
+            short int v = Ploop[i];
+            auto neighborsIterator = adjancyList.find(v);
 
-            vector<short int> Pinter = {}, Runion = {}, Xinter = {}, neighbors = {};
-
-            neighbors = get_neighbors(Ploop[0]);
-            auto neighborsIterator = adjancyList.find(P[0]);
-/*
-            printf("VOISINS DE %d : ",P[0]);
-            printf("[");
-            for(int j = 0; j < (int)(neighborsIterator->second.size()); j++)
-                printf(" %d ",neighborsIterator->second[j]);
-            printf("]\n");
-*/
-            for (int j = 0; j < (int)(neighborsIterator->second.size()); j++)
-            {   //adjancyList[j] => voisins de v
-/*
+            for (long unsigned int j = 0; j < neighborsIterator->second.size(); j++)
+            {   
+                // Création de l'intersection P               
                 if (count(P.begin(), P.end(), neighborsIterator->second[j])) {
                     Pinter.push_back(neighborsIterator->second[j]);
                 }
+                // Création de l'intersection X
                 if (count(X.begin(), X.end(), neighborsIterator->second[j])) {
                     Xinter.push_back(neighborsIterator->second[j]);
-                }*/
-                
-                for (long unsigned int k = 0; k < P.size(); k++)
-                {
-                    if (P[k] == neighborsIterator->second[j]){
-                        Pinter.push_back(P[k]);
-                    }
-                }
-
-                // Création de l'intersection X
-                for (long unsigned int k = 0; k < X.size(); k++)
-                {
-                    if (neighborsIterator->second[j] == X[k]){
-                        Xinter.push_back(X[k]);
-                    }
-                }               
+                }         
             }
             
-            //Pinter = get_neighbors_intersection(v,P);
-
             Runion = R;
-            Runion.push_back(P[0]);
+            Runion.push_back(v);
 
-            //Xinter = get_neighbors_intersection(v,X);
-/*
-            printf("P : ");
-            printf("[");
-            for(int j = 0; j < (int)(Pinter.size()); j++)
-                printf(" %d ",Pinter[j]);
-            printf("]\n");
-
-            printf("R : ");
-            printf("[");
-            for(int j = 0; j < (int)(Runion.size()); j++)
-                printf(" %d ",Runion[j]);
-            printf("]\n");
-
-            printf("X : ");
-            printf("[");
-            for(int j = 0; j < (int)(Xinter.size()); j++)
-                printf(" %d ",Xinter[j]);
-            printf("]\n\n");
-*/
             bron_kerbosch_aux(Pinter,Runion,Xinter,cliquesMAX);
 
-            X.push_back(P[0]);
-            P.erase(P.begin());
+            X.push_back(v);
+            remove(P.begin(),P.end(),v);
         }
         
     }
