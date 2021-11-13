@@ -245,4 +245,96 @@ public:
         }
         
     }
+
+
+
+    map <short int,vector<short int>> bron_kerbosch_pivot(){
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> P = {}, R = {}, X = {};
+
+        for (long unsigned int i = 0; i < get_adjancyList().size() ; i++) // on remplit P avec les sommets du graphe
+            P.push_back(i);
+
+        printf("Initialisation \n [");
+        for(long unsigned int i = 0; i < P.size(); i++)
+            printf(" %d ",P[i]);
+        printf("]\n\n");
+
+        bron_kerbosch_pivot_aux(P,R,X,cliquesMax);
+        return cliquesMax; // toutes les cliques ùaximales
+    }
+
+    void bron_kerbosch_pivot_aux(vector<short int> P, vector<short int> R, vector<short int> X, map <short int,vector<short int>> cliquesMAX){
+        if (P.empty() && X.empty() )
+        {
+            printf("Clique MAX trouve : [");
+            for(int i = 0; i < (int)(R.size()); i++)
+                printf(" %d ",R[i]);
+            printf("]\n\n");
+            return;
+        }
+
+        //choose a pivot u ∈P ∪X
+        short int u = choose_bron_kerbosh_pivot(P,X);
+        auto uNeighbors = adjancyList.find(u);
+
+        vector<short int> Ploop = P;
+
+        for (long unsigned int i = 0; i < uNeighbors->second.size(); i++)
+        {   
+            // Création de l'intersection Ploop             
+            if (count(Ploop.begin(), Ploop.end(), uNeighbors->second[i])) {
+                remove(Ploop.begin(),Ploop.end(),uNeighbors->second[i]);
+            }  
+        }
+
+        for (long unsigned int i = 0; i < Ploop.size(); i++) // Pour chaque sommet v de P
+        {
+            vector<short int> Pinter = {}, Runion = {}, Xinter = {};
+
+            short int v = Ploop[i];
+            auto neighborsIterator = adjancyList.find(v);
+
+            for (long unsigned int j = 0; j < neighborsIterator->second.size(); j++)
+            {   
+                // Création de l'intersection P               
+                if (count(P.begin(), P.end(), neighborsIterator->second[j])) {
+                    Pinter.push_back(neighborsIterator->second[j]);
+                }
+                // Création de l'intersection X
+                if (count(X.begin(), X.end(), neighborsIterator->second[j])) {
+                    Xinter.push_back(neighborsIterator->second[j]);
+                }         
+            }
+            
+            Runion = R;
+            Runion.push_back(v);
+
+            bron_kerbosch_pivot_aux(Pinter,Runion,Xinter,cliquesMAX);
+
+            X.push_back(v);
+            remove(P.begin(),P.end(),v);
+        }
+        
+    }
+
+    short int choose_bron_kerbosh_pivot(vector<short int> P, vector<short int> X) {
+        
+        if (!P.empty() && !X.empty()) {
+            for (long unsigned int i = 0; i < P.size(); i++)
+            {                  
+                if (count(X.begin(), X.end(), P[i])) {
+                    return P[i];
+                }     
+            }
+            return P[0];
+        }
+        else if (P.empty() && !X.empty()) {
+            return X[0];
+        }
+        else if (!P.empty() && X.empty()) {
+            return P[0];
+        }
+        return -1;
+    }
 };

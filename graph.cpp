@@ -42,7 +42,7 @@ int main()
 
     mama.display_graph();
 
-    mama.bron_kerbosch();
+    mama.bron_kerbosch_pivot();
 
    /* 
     // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices
