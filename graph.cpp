@@ -27,7 +27,7 @@ int main()
    f 0
    */
 
-    /*mama.add_vertice(6);
+    mama.add_vertice(6);
     mama.add_edge(1,0);
     mama.add_edge(1,2);
     mama.add_edge(2,3);
@@ -37,7 +37,7 @@ int main()
     mama.add_edge(4,2);
     mama.add_edge(5,2);
     mama.add_edge(4,3);
-    mama.add_edge(5,4);*/
+    mama.add_edge(5,4);
 
     /*mama.add_vertice(4);
     mama.add_edge(0,1);
@@ -57,7 +57,7 @@ int main()
    i 8
    */
 
-    mama.add_vertice(9);
+    /*mama.add_vertice(9);
     mama.add_edge(0,1);
 
     mama.add_edge(1,2);
@@ -82,12 +82,13 @@ int main()
 
     mama.add_edge(6,8);
 
-    mama.add_edge(7,8);
+    mama.add_edge(7,8);*/
 
 
     mama.display_graph();
 
 
+    mama.bron_kerbosch_degeneracy();
 
 
 
@@ -96,11 +97,11 @@ int main()
         printf(" %d ",ascendingVertices[i]);
     printf("]\n\n");*/
 
-    vector<short int> adjancyOrder = mama.find_degeneracy_order();
+    /*vector<short int> adjancyOrder = mama.find_degeneracy_order();
     printf("Ordre d'adjacence : [");
     for(long unsigned int i = 0; i < adjancyOrder.size(); i++)
         printf(" %d ",adjancyOrder[i]);
-    printf("]\n\n");
+    printf("]\n\n");*/
     //mama.bron_kerbosch_pivot();
 
 

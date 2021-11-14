@@ -388,4 +388,33 @@ public:
         
         adjancyList.erase(vertice);  
     }
+
+    /*map <short int,vector<short int>>*/void bron_kerbosch_degeneracy(){
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> P = {}, degeneracyOrder = {}, X = {}, degeneracyP= {}, degeneracyX = {}, viBKP = {};
+        short int vi;
+
+        degeneracyOrder = find_degeneracy_order();
+        degeneracyP = degeneracyOrder;
+        for (long unsigned int i = 0; i < degeneracyOrder.size(); i++)
+        {
+            vi = degeneracyOrder[i];
+
+            degeneracyP.erase(degeneracyP.begin());
+            P = get_neighbors_intersection(vi,degeneracyP);
+
+            X = get_neighbors_intersection(vi,degeneracyX);
+            degeneracyX.push_back(vi);
+
+            viBKP = {};
+            viBKP.push_back(vi);
+            bron_kerbosch_pivot_aux(P, viBKP ,X, cliquesMax);
+        }
+        
+        
+
+        
+        //return cliquesMax; // toutes les cliques ùaximales
+    }
+
 };
