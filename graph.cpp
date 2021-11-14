@@ -1,143 +1,414 @@
 #include "graph.h"
-#include <time.h>
 
-int main() 
-{
-    srand(time(NULL));
-    graph mama = graph();
-    graph mama2 = graph();
-    /*
-    int moyenne=0,i,nbessais=1;
-    graph mama;
-    for (i = 0; i < nbessais; i++)
+
+    graph::graph() 
     {
-        mama = graph();
-        mama.add_vertice(10);
-        moyenne += mama.random_graph(0.50);
-        //mama.display_graph();
-        mama.free_graph();
     }
-    printf("essais : %d\nmoyenne : %f\n",nbessais,((float)moyenne/nbessais));
-    */
-   /*
-   a 0
-   b 1
-   c 
-   d 2
-   e 1
-   f 0
-   */
 
-    mama.add_vertice(6);
-    mama.add_edge(1,0);
-    mama.add_edge(1,2);
-    mama.add_edge(2,3);
-    mama.add_edge(4,1);
-    mama.add_edge(0,5);
-    mama.add_edge(1,5);
-    mama.add_edge(4,2);
-    mama.add_edge(5,2);
-    mama.add_edge(4,3);
-    mama.add_edge(5,4);
-
-    /*mama.add_vertice(4);
-    mama.add_edge(0,1);
-    mama.add_edge(0,2);
-    mama.add_edge(1,3);
-    mama.add_edge(1,2);*/
-
-    /*
-   a 0
-   b 1
-   c 2
-   d 3
-   e 4
-   f 5
-   g 6
-   h 7
-   i 8
-   */
-
-    /*mama.add_vertice(9);
-    mama.add_edge(0,1);
-
-    mama.add_edge(1,2);
-    mama.add_edge(1,3);
-    mama.add_edge(1,4);
-    mama.add_edge(1,6);
-
-    mama.add_edge(2,4);
-    mama.add_edge(2,8);
-    mama.add_edge(2,5);
-
-    mama.add_edge(3,4);
-    mama.add_edge(3,7);
-    mama.add_edge(3,8);
-
-    mama.add_edge(4,5);
-    mama.add_edge(4,6);
-    mama.add_edge(4,7);
-    mama.add_edge(4,8);
-
-    mama.add_edge(5,7);
-
-    mama.add_edge(6,8);
-
-    mama.add_edge(7,8);*/
-
-
-    mama.display_graph();
-
-    mama2.add_vertice_algo1(mama,0);
-    mama2.add_vertice_algo1(mama,1);
-    mama2.add_vertice_algo1(mama,2);
-    mama2.add_vertice_algo1(mama,3);
-    //mama2 = mama2.add_vertice_algo1(mama,4);
-    //mama2 = mama2.add_vertice_algo1(mama,5);
-
-    mama2.display_graph();
-
-
-    //mama.bron_kerbosch_degeneracy();
-
-
-
-    /*printf("Tri : [");
-    for(long unsigned int i = 0; i < ascendingVertices.size(); i++)
-        printf(" %d ",ascendingVertices[i]);
-    printf("]\n\n");*/
-
-    /*vector<short int> adjancyOrder = mama.find_degeneracy_order();
-    printf("Ordre d'adjacence : [");
-    for(long unsigned int i = 0; i < adjancyOrder.size(); i++)
-        printf(" %d ",adjancyOrder[i]);
-    printf("]\n\n");*/
-    //mama.bron_kerbosch_pivot();
-
-
-   /* 
-    // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices
-    vertices R;
-    R.numberOfVerticesInList=1;
-    R.verticesList = (short int*)malloc(MAX_VERTICES*sizeof(short int));
-    for (i = 0; i < MAX_VERTICES; i++)
-    {
-        R.verticesList[i]=5;
+    short int graph::get_totalDegree(){
+        int totalDegree;
+        for (long unsigned int i = 0; i < get_adjancyList().size(); i++) {
+           totalDegree += (int)(get_adjancyList()[i].size());
+        }
+        return totalDegree;
     }
     
-    short int cliquesMaximales[MAX_VERTICES][MAX_VERTICES];
-    memcpy(cliquesMaximales[1],R.verticesList,MAX_VERTICES*sizeof(short int));
-    printf("1-max: %d, 2: %d\n",cliquesMaximales[0][14],R.verticesList[0]);
-    */
-
-    /*
-    mama.barabasi_albert(2);
-    mama.display_graph();
-    */
-    /*int listSubgraphe[2] = {5,4};
-    int subgrapheSize = 2;
-
-    mama.create_subgraph(listSubgraphe, subgrapheSize);*/
+    map<int, vector<int>> graph::get_adjancyList() {
+        return adjancyList;
+    }
     
-    return 0;
-}
+
+    void graph::display_graph(){
+        printf("##################################\n\n");
+        map<int, vector<int>>::iterator it;
+
+        for (it = adjancyList.begin(); it != adjancyList.end(); it++) {
+            for (long unsigned int j = 0; j < it->second.size();j++)
+            {
+                printf(" %d ", it->second[j]);
+            }
+            printf("\n");
+        }
+        printf("\n##################################\n\n");
+    }
+
+    void graph::add_vertice(int numberVerticeToAdd){
+        int i;
+        for (i = 0; i < numberVerticeToAdd; i++) {
+            vector<int> v (0, {});
+            adjancyList.insert(pair<int, vector<int>>(i, v));
+        }
+        
+    }
+
+    bool graph::add_edge(short int verticeSrc, short int verticeDest){
+        if (verticeDest==verticeSrc || verticeDest < 0 || verticeSrc < 0 || verticeDest >= MAX_VERTICES || verticeSrc >= MAX_VERTICES)
+            return false; // les valeurs donnees sont incorrects
+        
+        adjancyList[verticeSrc].push_back(verticeDest);
+        adjancyList[verticeDest].push_back(verticeSrc);
+
+        return true;
+    }
+
+    
+    int graph::get_number_neighbors(short int verticeNumber) {
+        return get_adjancyList()[verticeNumber].size();
+    }
+
+    
+
+    vector<short int> graph::get_neighbors(short int verticeNumber){
+        vector<short int> neighbors = {};
+        for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size() ; i++)
+            neighbors.push_back(get_adjancyList()[verticeNumber][i]);
+        return neighbors;
+    }
+
+    
+
+    vector<short int> graph::get_neighbors_intersection(short int verticeNumber, vector<short int> verticesToLook){
+        vector<short int> neighbors;
+        for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size() ; i++)
+        {
+            if (count(verticesToLook.begin(), verticesToLook.end(), get_adjancyList()[verticeNumber][i])) {
+                neighbors.push_back(get_adjancyList()[verticeNumber][i]);
+            }
+        }
+                
+        return neighbors;
+    }
+
+    
+
+    bool graph::is_graph_valid() {
+        if ((int)(get_adjancyList().size()) > 0){
+            return true;
+        }
+        return false;
+    }
+
+   
+    void graph::barabasi_albert(short int m) {
+        if (!is_graph_valid()){
+            return;
+        }
+
+        long unsigned int i = 0;
+        float barabasiAlbertProbability;
+
+        //graphe n sommet
+
+        //Ajout d'un nouveau noeud
+        add_vertice(1);
+
+        //graphe n sommet + 1 noeud sans arrete
+
+        while (m > 0 && i < get_adjancyList().size()-1) {
+            //calcul proba
+            barabasiAlbertProbability = (float)get_number_neighbors(i)/get_totalDegree();
+            if (result_probability(barabasiAlbertProbability)) {
+                add_edge((int)(get_adjancyList().size()),i);
+                m--;
+            }
+            i++;
+        }
+    }
+
+    bool graph::random_graph(float probability){
+        if (probability < 0.0001 || probability > 0.9999) // on verifie que la proba donnee est correcte
+            return false;
+
+        for (long unsigned int i = 0; i < get_adjancyList().size(); i++) // chaque sommet existant
+            for (long unsigned int j = 0; j < get_adjancyList()[i].size();  j++) // chaque voisin du sommet i
+                if (result_probability(probability))
+                    add_edge(i,j);
+        return true;
+    }
+
+    void graph::pop_front(vector<short int> &v)
+    {
+        if (v.size() > 0) {
+            v.erase(v.begin());
+        }
+    }
+
+    
+    map <short int,vector<short int>> graph::bron_kerbosch(){
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> P = {}, R = {}, X = {};
+
+        for (long unsigned int i = 0; i < get_adjancyList().size() ; i++) // on remplit P avec les sommets du graphe
+            P.push_back(i);
+
+        printf("Initialisation \n [");
+        for(long unsigned int i = 0; i < P.size(); i++)
+            printf(" %d ",P[i]);
+        printf("]\n\n");
+
+        bron_kerbosch_aux(P,R,X,cliquesMax);
+        return cliquesMax; // toutes les cliques ùaximales
+    }
+
+    void graph::bron_kerbosch_aux(vector<short int> P, vector<short int> R, vector<short int> X, map <short int,vector<short int>> cliquesMAX){
+        if (P.empty() && X.empty() )
+        {
+            printf("Clique MAX trouve : [");
+            for(int i = 0; i < (int)(R.size()); i++)
+                printf(" %d ",R[i]);
+            printf("]\n\n");
+            //return;
+        }
+
+        vector<short int> Ploop = P;
+
+        for (long unsigned int i = 0; i < Ploop.size(); i++) // Pour chaque sommet v de P
+        {
+            vector<short int> Pinter = {}, Runion = {}, Xinter = {};
+
+            short int v = Ploop[i];
+            auto neighborsIterator = adjancyList.find(v);
+
+            for (long unsigned int j = 0; j < neighborsIterator->second.size(); j++)
+            {   
+                // Création de l'intersection P               
+                if (count(P.begin(), P.end(), neighborsIterator->second[j])) {
+                    Pinter.push_back(neighborsIterator->second[j]);
+                }
+                // Création de l'intersection X
+                if (count(X.begin(), X.end(), neighborsIterator->second[j])) {
+                    Xinter.push_back(neighborsIterator->second[j]);
+                }         
+            }
+            
+            Runion = R;
+            Runion.push_back(v);
+
+            bron_kerbosch_aux(Pinter,Runion,Xinter,cliquesMAX);
+
+            X.push_back(v);
+            remove(P.begin(),P.end(),v);
+        }
+        
+    }
+
+
+    map <short int,vector<short int>> graph::bron_kerbosch_pivot(){
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> P = {}, R = {}, X = {};
+
+        for (long unsigned int i = 0; i < get_adjancyList().size() ; i++) // on remplit P avec les sommets du graphe
+            P.push_back(i);
+
+        printf("Initialisation \n [");
+        for(long unsigned int i = 0; i < P.size(); i++)
+            printf(" %d ",P[i]);
+        printf("]\n\n");
+
+        bron_kerbosch_pivot_aux(P,R,X,cliquesMax);
+        return cliquesMax; // toutes les cliques ùaximales
+    }
+
+    void graph::bron_kerbosch_pivot_aux(vector<short int> P, vector<short int> R, vector<short int> X, map <short int,vector<short int>> cliquesMAX){
+        if (P.empty() && X.empty() )
+        {
+            printf("Clique MAX trouve : [");
+            for(long unsigned int i = 0; i < R.size(); i++)
+                printf(" %d ",R[i]);
+            printf("]\n\n");
+            return;
+        }
+
+        //choose a pivot u ∈ P∪X
+        short int u = choose_bron_kerbosh_pivot(P,X);
+        printf("CHOIX DE U : %d\n",u);
+        auto uNeighbors = adjancyList.find(u);
+
+        vector<short int> Ploop;
+
+        for (long unsigned int i = 0; i < P.size(); i++)
+        {   
+            // Création de l'intersection Ploop             
+            if (!count(uNeighbors->second.begin(), uNeighbors->second.end(), P[i])) {
+                Ploop.push_back(P[i]);
+            }  
+        }
+
+        for (long unsigned int i = 0; i < Ploop.size(); i++) // Pour chaque sommet v de P
+        {
+            vector<short int> Pinter = {}, Runion = {}, Xinter = {};
+
+            short int v = Ploop[i];
+            auto neighborsIterator = adjancyList.find(v);
+
+            for (long unsigned int j = 0; j < neighborsIterator->second.size(); j++)
+            {   
+                // Création de l'intersection P               
+                if (count(P.begin(), P.end(), neighborsIterator->second[j])) {
+                    Pinter.push_back(neighborsIterator->second[j]);
+                }
+                // Création de l'intersection X
+                if (count(X.begin(), X.end(), neighborsIterator->second[j])) {
+                    Xinter.push_back(neighborsIterator->second[j]);
+                }         
+            }
+            
+            Runion = R;
+            Runion.push_back(v);
+
+            bron_kerbosch_pivot_aux(Pinter,Runion,Xinter,cliquesMAX);
+
+            X.push_back(v);
+            remove(P.begin(),P.end(),v);
+        }
+        
+    }
+
+    short int graph::choose_bron_kerbosh_pivot(vector<short int> P, vector<short int> X) {
+        vector<short int> neighbors = {};
+        int max = -1, actual;
+        short int u;
+        for (long unsigned int i = 0; i < P.size(); i++)
+        {
+            actual = get_neighbors_intersection(P[i],P).size();
+            if (actual > max) {
+                max = actual; u = P[i];
+            }
+        }
+        for (long unsigned int i = 0; i < X.size(); i++)
+        {   
+            actual = get_neighbors_intersection(X[i],X).size();
+            if (actual > max) {
+                max = actual; u = X[i];
+            }
+        }
+
+        return u;
+    }
+
+    //Ordre de degenerescence
+    vector<short int> graph::ascending_edges() {
+        vector<short int> ascendingEdges = {};
+        short int v;
+        map<int, vector<int>>::iterator it;
+
+        for (it = adjancyList.begin(); it != adjancyList.end(); it++)
+        {
+            ascendingEdges.push_back(it->first);
+        }
+
+        for (long unsigned int i = 0; i < ascendingEdges.size(); i++)
+        {
+            for (long unsigned int j = 0; j < ascendingEdges.size(); j++)
+            {
+                if (get_number_neighbors(ascendingEdges[i]) < get_number_neighbors(ascendingEdges[j])) {
+                    v = ascendingEdges[i];
+                    ascendingEdges[i] = ascendingEdges[j];
+                    ascendingEdges[j] = v;
+                }
+            }       
+        }
+        return ascendingEdges;
+    }
+
+    //Ordre de degenerescence
+    vector<short int> graph::find_degeneracy_order() {
+        vector<short int> ascendingEdges = ascending_edges();
+        vector<short int> degeneracyOrder = {};
+        graph gCopy = *(this);
+        long unsigned int maxSize = ascendingEdges.size();
+
+        for (long unsigned int i = 0; i < maxSize; i++)
+        {
+            degeneracyOrder.push_back(ascendingEdges[0]);
+            gCopy.delete_vertice(ascendingEdges[0]);
+            ascendingEdges = gCopy.ascending_edges();
+        } 
+        return degeneracyOrder;      
+    }
+
+    void graph::delete_vertice(short int vertice) {
+        vector<short int> neighbors = get_neighbors(vertice);
+
+        for (long unsigned int i = 0; i < neighbors.size(); i++)
+            for (long unsigned int j = 0; j < adjancyList[neighbors[i]].size(); j++) 
+                if (adjancyList[neighbors[i]][j] == vertice)
+                    adjancyList[neighbors[i]].erase(adjancyList[neighbors[i]].begin()+j);
+        
+        adjancyList.erase(vertice);  
+    }
+
+    void graph::bron_kerbosch_degeneracy(){
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> P = {}, degeneracyOrder = {}, X = {}, degeneracyP= {}, degeneracyX = {}, viBKP = {};
+        short int vi;
+
+        degeneracyOrder = find_degeneracy_order();
+        degeneracyP = degeneracyOrder;
+        for (long unsigned int i = 0; i < degeneracyOrder.size(); i++)
+        {
+            vi = degeneracyOrder[i];
+
+            degeneracyP.erase(degeneracyP.begin());
+            P = get_neighbors_intersection(vi,degeneracyP);
+
+            X = get_neighbors_intersection(vi,degeneracyX);
+            degeneracyX.push_back(vi);
+
+            viBKP = {};
+            viBKP.push_back(vi);
+            bron_kerbosch_pivot_aux(P, viBKP ,X, cliquesMax);
+        }        
+        //return cliquesMax; // toutes les cliques ùaximales
+    }
+
+    void graph::add_vertice_algo1(graph g, short int vertice){
+        vector<short int> vertices = {};
+        map<int, vector<int>>::iterator it;
+        graph g2 = g;
+
+        for (it = adjancyList.begin(); it != adjancyList.end(); it++) {
+            vertices.push_back(it->first);
+        }
+        vertices.push_back(vertice);
+
+        
+        for (long unsigned int i = 0; i < g.adjancyList.size(); i++)
+        {
+            if (!count(vertices.begin(), vertices.end(), i)){
+                g2.delete_vertice(i);
+            }
+        }
+        *(this) = g2;
+    }
+
+    void graph::algo1() {
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> degeneracyOrder = {};
+        graph Gj;
+
+        // k ? 
+
+        degeneracyOrder = find_degeneracy_order();
+
+        for (long unsigned int i = 0; i < degeneracyOrder.size(); i++)
+        {
+            //creer un graphe vide
+            //ajouter le sommet j
+            Gj.add_vertice_algo1(*(this),degeneracyOrder[i]);
+            //bk
+            //for chaque clique K de Gj
+                //degen
+                //if count search k dans t
+                    //suppr click
+                //else
+                    // ?????
+                    //renvoyer k
+        }
+        
+    }
+
+    void graph::algo2() {
+        
+        
+    }
