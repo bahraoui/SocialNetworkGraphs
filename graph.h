@@ -409,12 +409,59 @@ public:
             viBKP = {};
             viBKP.push_back(vi);
             bron_kerbosch_pivot_aux(P, viBKP ,X, cliquesMax);
+        }        
+        //return cliquesMax; // toutes les cliques ùaximales
+    }
+
+    void add_vertice_algo1(graph g, short int vertice){
+        vector<short int> vertices = {};
+        map<int, vector<int>>::iterator it;
+        graph g2 = g;
+
+        for (it = adjancyList.begin(); it != adjancyList.end(); it++) {
+            vertices.push_back(it->first);
         }
-        
-        
+        vertices.push_back(vertice);
 
         
-        //return cliquesMax; // toutes les cliques ùaximales
+        for (long unsigned int i = 0; i < g.adjancyList.size(); i++)
+        {
+            if (!count(vertices.begin(), vertices.end(), i)){
+                g2.delete_vertice(i);
+            }
+        }
+        *(this) = g2;
+    }
+
+    void algo1() {
+        map <short int,vector<short int>>cliquesMax;
+        vector<short int> degeneracyOrder = {};
+        graph Gj;
+
+        // k ? 
+
+        degeneracyOrder = find_degeneracy_order();
+
+        for (long unsigned int i = 0; i < degeneracyOrder.size(); i++)
+        {
+            //creer un graphe vide
+            //ajouter le sommet j
+            Gj.add_vertice_algo1(*(this),degeneracyOrder[i]);
+            //bk
+            //for chaque clique K de Gj
+                //degen
+                //if count search k dans t
+                    //suppr click
+                //else
+                    // ?????
+                    //renvoyer k
+        }
+        
+    }
+
+    void algo2() {
+        
+        
     }
 
 };

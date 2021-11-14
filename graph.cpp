@@ -5,6 +5,7 @@ int main()
 {
     srand(time(NULL));
     graph mama = graph();
+    graph mama2 = graph();
     /*
     int moyenne=0,i,nbessais=1;
     graph mama;
@@ -87,8 +88,17 @@ int main()
 
     mama.display_graph();
 
+    mama2.add_vertice_algo1(mama,0);
+    mama2.add_vertice_algo1(mama,1);
+    mama2.add_vertice_algo1(mama,2);
+    mama2.add_vertice_algo1(mama,3);
+    //mama2 = mama2.add_vertice_algo1(mama,4);
+    //mama2 = mama2.add_vertice_algo1(mama,5);
 
-    mama.bron_kerbosch_degeneracy();
+    mama2.display_graph();
+
+
+    //mama.bron_kerbosch_degeneracy();
 
 
 
