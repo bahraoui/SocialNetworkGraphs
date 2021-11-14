@@ -17,7 +17,6 @@
         return adjancyList;
     }
     
-
     void graph::display_graph(){
         printf("##################################\n\n");
         map<int, vector<int>>::iterator it;
@@ -56,16 +55,12 @@
         return get_adjancyList()[verticeNumber].size();
     }
 
-    
-
     vector<short int> graph::get_neighbors(short int verticeNumber){
         vector<short int> neighbors = {};
         for (long unsigned int i = 0; i < get_adjancyList()[verticeNumber].size() ; i++)
             neighbors.push_back(get_adjancyList()[verticeNumber][i]);
         return neighbors;
     }
-
-    
 
     vector<short int> graph::get_neighbors_intersection(short int verticeNumber, vector<short int> verticesToLook){
         vector<short int> neighbors;
@@ -79,16 +74,13 @@
         return neighbors;
     }
 
-    
-
     bool graph::is_graph_valid() {
         if ((int)(get_adjancyList().size()) > 0){
             return true;
         }
         return false;
     }
-
-   
+  
     void graph::barabasi_albert(short int m) {
         if (!is_graph_valid()){
             return;
@@ -132,8 +124,7 @@
             v.erase(v.begin());
         }
     }
-
-    
+ 
     map <short int,vector<short int>> graph::bron_kerbosch(){
         map <short int,vector<short int>>cliquesMax;
         vector<short int> P = {}, R = {}, X = {};
@@ -191,7 +182,6 @@
         }
         
     }
-
 
     map <short int,vector<short int>> graph::bron_kerbosch_pivot(){
         map <short int,vector<short int>>cliquesMax;
