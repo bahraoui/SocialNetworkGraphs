@@ -32,9 +32,11 @@ map<int, vector<int>> graph::get_cliquesMax()
     return cliquesMax;
 }
 
-/**
-     * Affiche le graphe 
-    */
+void graph::set_cliquesMax(map<int, vector<int>> parCliquesMax)
+{
+    cliquesMax = parCliquesMax;
+}
+
 void graph::display_graph()
 {
     printf("################ START #################\n");
@@ -48,6 +50,24 @@ void graph::display_graph()
         printf("\n");
     }
     printf("\n############## END ####################\n\n");
+}
+
+void graph::display_cliques()
+{
+    printf("CLIQUES : \n");
+    map<int, vector<int>>::iterator p;
+
+    for (p = cliquesMax.begin(); p != cliquesMax.end(); p++)
+    {
+        printf("[");
+        for (long unsigned int i = 0; i < p->second.size(); i++)
+        {
+            printf("%d ", p->second[i]);
+        }
+        printf("]\n");
+        cout << endl;
+    }
+    cout << endl;
 }
 
 void graph::add_vertice(int numberVerticeToAdd)

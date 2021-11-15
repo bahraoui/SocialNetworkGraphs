@@ -1,6 +1,6 @@
 CC=g++
 OPT=-Wall
-FILES=main.cpp graph.cpp graph.h bronKerbosch.h bronKerbosch.cpp manoussakis.cpp manoussakis.h random.cpp random.h
+FILES=main.cpp graph.cpp graph.h bronKerbosch.h bronKerbosch.cpp bronKerboschPivot.h bronKerboschPivot.cpp bronKerboschDegeneracy.h bronKerboschDegeneracy.cpp manoussakis.cpp manoussakis.h random.cpp random.h
 EXE=executable.out
 
 all:

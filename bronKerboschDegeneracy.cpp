@@ -2,13 +2,13 @@
 #include "bronKerboschPivot.h"
 
 //Ordre de degenerescence
-vector<int> ascending_edges(graph g)
+vector<int> ascending_edges(graph *g)
 {
     int v;
 
     vector<int> ascendingEdges = {};
 
-    map<int, vector<int>> adjancyListGraph = g.get_adjancyList();
+    map<int, vector<int>> adjancyListGraph = g->get_adjancyList();
     map<int, vector<int>>::iterator it;
 
     for (it = adjancyListGraph.begin(); it != adjancyListGraph.end(); it++)
@@ -18,7 +18,7 @@ vector<int> ascending_edges(graph g)
     {
         for (long unsigned int j = 0; j < ascendingEdges.size(); j++)
         {
-            if (g.get_number_neighbors(ascendingEdges[i]) < g.get_number_neighbors(ascendingEdges[j]))
+            if (g->get_number_neighbors(ascendingEdges[i]) < g->get_number_neighbors(ascendingEdges[j]))
             {
                 v = ascendingEdges[i];
                 ascendingEdges[i] = ascendingEdges[j];
@@ -31,13 +31,13 @@ vector<int> ascending_edges(graph g)
 }
 
 //Ordre de degenerescence
-vector<int> find_degeneracy_order(graph g)
+vector<int> find_degeneracy_order(graph *g)
 {
     long unsigned int maxSize;
 
     vector<int> ascendingEdges = ascending_edges(g), degeneracyOrder = {};
 
-    graph gCopy = g;
+    graph gCopy = *(g);
 
     maxSize = ascendingEdges.size();
 
@@ -45,13 +45,13 @@ vector<int> find_degeneracy_order(graph g)
     {
         degeneracyOrder.push_back(ascendingEdges[0]);
         gCopy.delete_vertice(ascendingEdges[0]);
-        ascendingEdges = ascending_edges(g);
+        ascendingEdges = ascending_edges(&gCopy);
     }
 
     return degeneracyOrder;
 }
 
-void bron_kerbosch_degeneracy(graph g)
+void bron_kerbosch_degeneracy(graph *g)
 {
     int vertice;
 
@@ -62,9 +62,9 @@ void bron_kerbosch_degeneracy(graph g)
         vertice = degeneracyOrder[i];
 
         degeneracyP.erase(degeneracyP.begin());
-        P = g.get_neighbors_intersection(vertice, degeneracyP);
+        P = g->get_neighbors_intersection(vertice, degeneracyP);
 
-        X = g.get_neighbors_intersection(vertice, degeneracyX);
+        X = g->get_neighbors_intersection(vertice, degeneracyX);
         degeneracyX.push_back(vertice);
 
         verticeBronKerboschPivot = {};

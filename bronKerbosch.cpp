@@ -1,10 +1,10 @@
 #include "bronKerbosch.h"
 
-void bron_kerbosch(graph g)
+void bron_kerbosch(graph *g)
 {
     vector<int> P = {}, R = {}, X = {};
 
-    map<int, vector<int>> adjancyListGraph = g.get_adjancyList();
+    map<int, vector<int>> adjancyListGraph = g->get_adjancyList();
 
     map<int, vector<int>>::iterator it;
 
@@ -14,16 +14,16 @@ void bron_kerbosch(graph g)
     bron_kerbosch_aux(g, P, R, X);
 }
 
-void bron_kerbosch_aux(graph g, vector<int> P, vector<int> R, vector<int> X)
+void bron_kerbosch_aux(graph *g, vector<int> P, vector<int> R, vector<int> X)
 {
     int v;
     vector<int> Ploop = P;
-    map<int, vector<int>> cliquesMax = g.get_cliquesMax();
-    map<int, vector<int>> adjancyListGraph = g.get_adjancyList();
+    map<int, vector<int>> cliquesMax = g->get_cliquesMax(), adjancyListGraph = g->get_adjancyList();
 
     if (P.empty() && X.empty())
     {
         cliquesMax.insert(pair<int, vector<int>>((int)(cliquesMax.size()), R));
+        g->set_cliquesMax(cliquesMax);
         return;
     }
 

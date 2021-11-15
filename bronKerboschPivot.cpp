@@ -1,10 +1,11 @@
-#include "bronKerbosch.h"
+#include "bronKerboschPivot.h"
 
-void bron_kerbosch_pivot(graph g)
+void bron_kerbosch_pivot(graph *g)
 {
     vector<int> P = {}, R = {}, X = {};
 
-    map<int, vector<int>> adjancyListGraph = g.get_adjancyList();
+    map<int, vector<int>> adjancyListGraph = g->get_adjancyList();
+
     map<int, vector<int>>::iterator it;
 
     for (it = adjancyListGraph.begin(); it != adjancyListGraph.end(); it++)
@@ -13,18 +14,18 @@ void bron_kerbosch_pivot(graph g)
     bron_kerbosch_pivot_aux(g, P, R, X);
 }
 
-void bron_kerbosch_pivot_aux(graph g, vector<int> P, vector<int> R, vector<int> X)
+void bron_kerbosch_pivot_aux(graph *g, vector<int> P, vector<int> R, vector<int> X)
 {
     int v, u;
-    vector<int> Pinter = {}, Runion = {}, Xinter = {};
-    vector<int> Ploop;
 
-    map<int, vector<int>> cliquesMax = g.get_cliquesMax();
-    map<int, vector<int>> adjancyListGraph = g.get_adjancyList();
+    vector<int> Pinter, Runion, Xinter, Ploop = {};
+
+    map<int, vector<int>> cliquesMax = g->get_cliquesMax(), adjancyListGraph = g->get_adjancyList();
 
     if (P.empty() && X.empty())
     {
         cliquesMax.insert(pair<int, vector<int>>((int)(cliquesMax.size()), R));
+        g->set_cliquesMax(cliquesMax);
         return;
     }
 
@@ -41,6 +42,7 @@ void bron_kerbosch_pivot_aux(graph g, vector<int> P, vector<int> R, vector<int> 
 
     for (long unsigned int i = 0; i < Ploop.size(); i++) // Pour chaque sommet v de P
     {
+        Pinter = {}, Runion = {}, Xinter = {};
         v = Ploop[i];
         auto neighborsIterator = adjancyListGraph.find(v);
 
@@ -64,7 +66,7 @@ void bron_kerbosch_pivot_aux(graph g, vector<int> P, vector<int> R, vector<int> 
     }
 }
 
-int choose_bron_kerbosh_pivot(graph g, vector<int> P, vector<int> X)
+int choose_bron_kerbosh_pivot(graph *g, vector<int> P, vector<int> X)
 {
     int u, actual, max = -1;
 
@@ -72,7 +74,7 @@ int choose_bron_kerbosh_pivot(graph g, vector<int> P, vector<int> X)
 
     for (long unsigned int i = 0; i < P.size(); i++)
     {
-        actual = g.get_neighbors_intersection(P[i], P).size();
+        actual = g->get_neighbors_intersection(P[i], P).size();
         if (actual > max)
         {
             max = actual;
@@ -81,7 +83,7 @@ int choose_bron_kerbosh_pivot(graph g, vector<int> P, vector<int> X)
     }
     for (long unsigned int i = 0; i < X.size(); i++)
     {
-        actual = g.get_neighbors_intersection(X[i], X).size();
+        actual = g->get_neighbors_intersection(X[i], X).size();
         if (actual > max)
         {
             max = actual;

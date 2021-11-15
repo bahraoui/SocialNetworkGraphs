@@ -29,7 +29,7 @@ void barabasi_albert(graph *g, int m)
 
     //graphe n sommet + 1 noeud sans arrete
 
-    while (m > 0 && i < g->get_adjancyList().size() - 1)
+    while (m > 0 && i < adjancyListGraph.size() - 1)
     {
         //calcul proba
         barabasiAlbertProbability = (float)g->get_number_neighbors(i) / g->get_totalDegree();

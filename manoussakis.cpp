@@ -63,16 +63,16 @@ map<int, vector<int>> manoussakis_algorithm_1(graph g)
     map<int, vector<int>> cliquesMaxFind;
     map<int, vector<int>>::iterator it;
 
-    graph Gj;
+    graph *Gj;
 
-    Gj.add_vertice(1);
+    Gj->add_vertice(1);
 
     for (int i = 1; i < vertices; i++)
     {
-        create_algo_GJ(g, Gj, i);
+        create_algo_GJ(g, *Gj, i);
         bron_kerbosch(Gj);
 
-        cliquesMaxFind = Gj.get_cliquesMax();
+        cliquesMaxFind = Gj->get_cliquesMax();
 
         for (it = cliquesMaxFind.begin(); it != cliquesMaxFind.end(); it++)
         {
