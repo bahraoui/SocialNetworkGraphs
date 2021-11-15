@@ -1,14 +1,13 @@
 #include "manoussakis.h"
 
-void create_algo_GJ(graph g1, graph g2, int vertice)
+void create_algo_GJ(graph *g1, graph *g2, int vertice)
 {
     vector<int> vertices = {};
 
     map<int, vector<int>>::iterator it;
-    map<int, vector<int>> adjancyListGraph1 = g1.get_adjancyList();
-    map<int, vector<int>> adjancyListGraph2 = g2.get_adjancyList();
+    map<int, vector<int>> adjancyListGraph1 = g1->get_adjancyList(), adjancyListGraph2 = g2->get_adjancyList();
 
-    graph g3 = g2;
+    graph *g3 = g2;
 
     for (it = adjancyListGraph1.begin(); it != adjancyListGraph1.end(); it++)
         vertices.push_back(it->first);
@@ -19,7 +18,7 @@ void create_algo_GJ(graph g1, graph g2, int vertice)
     {
         if (!count(vertices.begin(), vertices.end(), i))
         {
-            g3.delete_vertice(i);
+            g3->delete_vertice(i);
         }
     }
     g1 = g3;
@@ -51,28 +50,25 @@ int map_contains_clique(map<int, vector<int>> mapTest, vector<int> clique)
     return -1;
 }
 
-map<int, vector<int>> manoussakis_algorithm_1(graph g)
+map<int, vector<int>> manoussakis_algorithm_1(graph *g)
 {
-    int inT, inDeletedClique, vertices = g.get_numberVertices();
+    int inT, inDeletedClique, vertices = g->get_numberVertices();
 
-    vector<int> degeneracyOrder = {}; //find_degeneracy_order(g);
-    vector<int> K;
+    vector<int> K, degeneracyOrder = {}; //find_degeneracy_order(g);
 
-    map<int, vector<int>> T, p;
-    map<int, vector<int>> deletedClique;
-    map<int, vector<int>> cliquesMaxFind;
+    map<int, vector<int>> T, p, deletedClique, cliquesMaxFind;
     map<int, vector<int>>::iterator it;
 
-    graph *Gj;
+    graph Gj;
 
-    Gj->add_vertice(1);
+    Gj.add_vertice(1);
 
     for (int i = 1; i < vertices; i++)
     {
-        create_algo_GJ(g, *Gj, i);
-        bron_kerbosch(Gj);
+        create_algo_GJ(g, &Gj, i);
+        bron_kerbosch(&Gj);
 
-        cliquesMaxFind = Gj->get_cliquesMax();
+        cliquesMaxFind = Gj.get_cliquesMax();
 
         for (it = cliquesMaxFind.begin(); it != cliquesMaxFind.end(); it++)
         {
