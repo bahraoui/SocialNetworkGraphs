@@ -5,20 +5,20 @@ Projet IATIC 4 Réalisé par Marwane BAHRAOUI et Reda GUENDOUZ - Détection de c
 # Arborescence
 Voici la répartition des fichiers suivant les parties du projets :
 
-### 1ere partie :
+### 1ere partie
  - graph.cpp
  - graph.h
 
-### 2eme partie :
-#### Standard Bron Kerbosh 
+### 2eme partie
+#### Standard Bron Kerbosh  :
  - bronKerbosch.cpp
  - bronKerbosch.h
 
-#### Bron Kerbosh Pivot
+#### Bron Kerbosh Pivot :
  - bronKerboschPivot.cpp
  - bronKerboschPivot.h
 
-#### Bron Kerbosh Degeneracy
+#### Bron Kerbosh Degeneracy :
  - bronKerboschDegeneracy.cpp
  - bronKerboschDegeneracy.h
 
@@ -32,7 +32,9 @@ Voici la répartition des fichiers suivant les parties du projets :
 Utilisation de la commande make (Installation : **sudo apt-get install make**)
 
 pour compiler : **make**
+
 pour lancer l'executable apres compilation : **./executable.out**
+
 pour supprimer les .o et executable : **make clean**
 
 
