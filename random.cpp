@@ -4,7 +4,7 @@
 bool result_probability(float probability)
 {
     float r = ((double)rand() / (RAND_MAX));
-    //printf("%f -- %f\n",r,probability);
+
     if (r <= probability)
         return true;
     return false;
@@ -17,7 +17,7 @@ void barabasi_albert(graph *g, int m)
 
     map<int, vector<int>> adjancyListGraph = g->get_adjancyList();
 
-    if (!g->is_graph_valid())
+    if (!g->is_graph_valid()) //si le graph
     {
         return;
     }
