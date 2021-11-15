@@ -1,34 +1,34 @@
-# Social Network Graphs
+# Social Network Graphs #
 Projet IATIC 4 Réalisé par Marwane BAHRAOUI et Reda GUENDOUZ - Détection de communautés dans des réseaux sociaux
 
 
-# Arborescence
+# Arborescence #
 Voici la répartition des fichiers suivant les parties du projets :
 
-### 1ere partie
+### 1ere partie ###
  - graph.cpp
  - graph.h
 
-### 2eme partie
-#### Standard Bron Kerbosh  :
+### 2eme partie ###
+#### Standard Bron Kerbosh  : ####
  - bronKerbosch.cpp
  - bronKerbosch.h
 
-#### Bron Kerbosh Pivot :
+#### Bron Kerbosh Pivot : ####
  - bronKerboschPivot.cpp
  - bronKerboschPivot.h
 
-#### Bron Kerbosh Degeneracy :
+#### Bron Kerbosh Degeneracy : ####
  - bronKerboschDegeneracy.cpp
  - bronKerboschDegeneracy.h
 
-### 3eme partie :
+### 3eme partie : ###
  - manoussakis.cpp
  - manoussakis.h
 
 
-# Execution 
-## Compilation
+# Execution #
+## Compilation ##
 Utilisation de la commande make (Installation : **sudo apt-get install make**)
 
 pour compiler : **make**
@@ -38,10 +38,10 @@ pour lancer l'executable apres compilation : **./executable.out**
 pour supprimer les .o et executable : **make clean**
 
 
-## Partie 1 : 
+## Partie 1 : ##
 
 
-### - Génération de graphes :
+### - Génération de graphes : ###
 
 ```cpp
 printf("Part 1 :\n");
@@ -84,9 +84,9 @@ gBarabasiAlbert.display_graph();
 printf("\n\n\n");
 ```
 
-# Partie 2 : 
+## Partie 2 : ##
 
-### - Bron-Kerbosch :
+### - Bron-Kerbosch : ###
 
 ```cpp
 printf("Part 2 :\n");
@@ -175,9 +175,9 @@ printf("\n");
 ```
 
 
-# Partie 3 : 
+## Partie 3 : ##
 
-### - Algorithme 1:
+### - Algorithme 1: ###
 ```cpp
 printf("Part 3 :\n");
 
