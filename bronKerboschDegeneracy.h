@@ -1,6 +1,7 @@
+#include "graph.h"
+
 #ifndef BKD
 #define BKD
-#include "graph.h"
 
 vector<int> ascending_edges(graph g);
 

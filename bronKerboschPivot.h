@@ -1,6 +1,7 @@
+#include "graph.h"
+
 #ifndef BKP
 #define BKP
-#include "graph.h"
 
 void bron_kerbosch_pivot(graph g);
 

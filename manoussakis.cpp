@@ -1,7 +1,4 @@
 #include "manoussakis.h"
-#ifndef M
-#define M
-#include "graph.h"
 
 void create_algo_GJ(graph g1, graph g2, int vertice)
 {
@@ -58,7 +55,7 @@ map<int, vector<int>> manoussakis_algorithm_1(graph g)
 {
     int inT, inDeletedClique, vertices = g.get_numberVertices();
 
-    vector<int> degeneracyOrder = find_degeneracy_order(g);
+    vector<int> degeneracyOrder = {}; //find_degeneracy_order(g);
     vector<int> K;
 
     map<int, vector<int>> T, p;
@@ -96,5 +93,3 @@ map<int, vector<int>> manoussakis_algorithm_1(graph g)
 
     return T;
 }
-
-#endif

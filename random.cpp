@@ -10,48 +10,55 @@ bool result_probability(float probability)
     return false;
 }
 
-void barabasi_albert(graph g, int m)
+void barabasi_albert(graph *g, int m)
 {
-    if (!g.is_graph_valid())
+    long unsigned int i = 0;
+    float barabasiAlbertProbability;
+
+    map<int, vector<int>> adjancyListGraph = g->get_adjancyList();
+
+    if (!g->is_graph_valid())
     {
         return;
     }
 
-    long unsigned int i = 0;
-    float barabasiAlbertProbability;
-
     //graphe n sommet
 
     //Ajout d'un nouveau noeud
-    g.add_vertice(1);
+    g->add_vertice(1);
 
     //graphe n sommet + 1 noeud sans arrete
 
-    while (m > 0 && i < g.get_adjancyList().size() - 1)
+    while (m > 0 && i < g->get_adjancyList().size() - 1)
     {
         //calcul proba
-        barabasiAlbertProbability = (float)g.get_number_neighbors(i) / g.get_totalDegree();
+        barabasiAlbertProbability = (float)g->get_number_neighbors(i) / g->get_totalDegree();
         if (result_probability(barabasiAlbertProbability))
         {
-            g.add_edge((int)(g.get_adjancyList().size()), i);
+            g->add_edge((int)(g->get_adjancyList().size()), i);
             m--;
         }
         i++;
     }
 }
 
-bool random_graph(graph g, float probability)
+bool random_graph(graph *g, float probability)
 {
     int cmpt = 0;
+
+    map<int, vector<int>> adjancyListGraph = g->get_adjancyList();
+
     if (probability < 0.0001 || probability > 0.9999) // on verifie que la proba donnee est correcte
         return false;
-    //display_matrix();
-    for (long unsigned int i = 0; i < g.get_adjancyList().size(); i++) // chaque sommet existant
+
+    for (long unsigned int i = 0; i < adjancyListGraph.size(); i++) // chaque sommet existant
     {
-        for (long unsigned int j = 0; j < g.get_adjancyList()[i].size(); j++)
+        for (long unsigned int j = 0; j < adjancyListGraph.size(); j++)
         { // chaque voisin du sommet i
             if (result_probability(probability))
-                g.add_edge(i, j);
+            {
+                g->add_edge(i, j);
+            }
         }
     }
     return cmpt;

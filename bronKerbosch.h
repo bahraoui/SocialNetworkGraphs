@@ -1,6 +1,7 @@
+#include "graph.h"
+
 #ifndef BK
 #define BK
-#include "graph.h"
 
 void bron_kerbosch(graph g);
 
