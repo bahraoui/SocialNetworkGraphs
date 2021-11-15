@@ -260,13 +260,14 @@ public:
         return cliquesMax; // toutes les cliques ùaximales
     }
 
-    void bron_kerbosch_pivot_aux(vector<short int> P, vector<short int> R, vector<short int> X, map <short int,vector<short int>> cliquesMAX){
+    void bron_kerbosch_pivot_aux(vector<short int> P, vector<short int> R, vector<short int> X, map <short int,vector<short int>> cliquesMax){
         if (P.empty() && X.empty() )
         {
-            printf("Clique MAX trouve : [");
-            for(long unsigned int i = 0; i < R.size(); i++)
-                printf(" %d ",R[i]);
-            printf("]\n\n");
+	    for (long unsigned int i = 0; i < R.size(); i++)
+		printf("%d \n",R[i]);
+	    short int taille = (short int)(cliquesMax.size());
+            cliquesMax.insert(pair<short int, vector<short int>>(taille ,R));
+	    printf("Trouvé : %d !\n", taille);
             return;
         }
 
@@ -307,7 +308,7 @@ public:
             Runion = R;
             Runion.push_back(v);
 
-            bron_kerbosch_pivot_aux(Pinter,Runion,Xinter,cliquesMAX);
+            bron_kerbosch_pivot_aux(Pinter,Runion,Xinter,cliquesMax);
 
             X.push_back(v);
             remove(P.begin(),P.end(),v);
@@ -389,7 +390,7 @@ public:
         adjancyList.erase(vertice);  
     }
 
-    /*map <short int,vector<short int>>*/void bron_kerbosch_degeneracy(){
+    map <short int,vector<short int>> bron_kerbosch_degeneracy(){
         map <short int,vector<short int>>cliquesMax;
         vector<short int> P = {}, degeneracyOrder = {}, X = {}, degeneracyP= {}, degeneracyX = {}, viBKP = {};
         short int vi;
@@ -410,7 +411,7 @@ public:
             viBKP.push_back(vi);
             bron_kerbosch_pivot_aux(P, viBKP ,X, cliquesMax);
         }        
-        //return cliquesMax; // toutes les cliques ùaximales
+        return cliquesMax; // toutes les cliques ùaximales
     }
 
     void add_vertice_algo1(graph g, short int vertice){
@@ -436,27 +437,29 @@ public:
     void algo1() {
         map <short int,vector<short int>>cliquesMax;
         vector<short int> degeneracyOrder = {};
+        vector<vector<short int>> T = {};
+        map<short int, vector<short int>>::iterator it;
         graph Gj;
+        vector<short int> K;
 
-        // k ? 
 
         degeneracyOrder = find_degeneracy_order();
 
         for (long unsigned int i = 0; i < degeneracyOrder.size(); i++)
         {
-            //creer un graphe vide
-            //ajouter le sommet j
             Gj.add_vertice_algo1(*(this),degeneracyOrder[i]);
-            //bk
-            //for chaque clique K de Gj
-                //degen
-                //if count search k dans t
-                    //suppr click
-                //else
-                    // ?????
-                    //renvoyer k
+            cliquesMax = Gj.bron_kerbosch_degeneracy();
+
+            for (it = cliquesMax.begin(); it != cliquesMax.end(); it++) {
+                K = it->second;
+                if (count(T.begin(), T.end(), K))
+                    printf("\n");
+		    //reject it
+                else
+                    T.push_back(K);
+                    //OUTPUT K
+            }
         }
-        
     }
 
     void algo2() {
