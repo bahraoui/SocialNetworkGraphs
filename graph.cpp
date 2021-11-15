@@ -1,7 +1,7 @@
 #include "graph.h"
 #include <time.h>
 
-int main() 
+int main()
 {
     srand(time(NULL));
     graph mama = graph();
@@ -19,7 +19,7 @@ int main()
     }
     printf("essais : %d\nmoyenne : %f\n",nbessais,((float)moyenne/nbessais));
     */
-   /*
+    /*
    a 0
    b 1
    c 
@@ -28,23 +28,23 @@ int main()
    f 0
    */
 
-    mama.add_vertice(6);
-    mama.add_edge(1,0);
-    mama.add_edge(1,2);
-    mama.add_edge(2,3);
-    mama.add_edge(4,1);
-    mama.add_edge(0,5);
-    mama.add_edge(1,5);
-    mama.add_edge(4,2);
-    mama.add_edge(5,2);
-    mama.add_edge(4,3);
-    mama.add_edge(5,4);
+    /*mama.add_vertice(6);
+    mama.add_edge(1, 0);
+    mama.add_edge(1, 2);
+    mama.add_edge(2, 3);
+    mama.add_edge(4, 1);
+    mama.add_edge(0, 5);
+    mama.add_edge(1, 5);
+    mama.add_edge(4, 2);
+    mama.add_edge(5, 2);
+    mama.add_edge(4, 3);
+    mama.add_edge(5, 4);*/
 
-    /*mama.add_vertice(4);
-    mama.add_edge(0,1);
-    mama.add_edge(0,2);
-    mama.add_edge(1,3);
-    mama.add_edge(1,2);*/
+    mama.add_vertice(4);
+    mama.add_edge(0, 1);
+    mama.add_edge(0, 2);
+    mama.add_edge(1, 2);
+    mama.add_edge(1, 3);
 
     /*
    a 0
@@ -85,12 +85,49 @@ int main()
 
     mama.add_edge(7,8);*/
 
-
     mama.display_graph();
 
-    map<short int, vector<short int>> cliques = mama.bron_kerbosch_pivot();
+    mama.algo1();
 
-    printf ("nb cliques : %d \n",(int)(cliques.size()));
+    /*mama2.add_vertice_algo1(mama, 0);
+
+    mama2.display_graph();
+
+    mama2.add_vertice_algo1(mama, 1);
+
+    mama2.display_graph();*/
+
+    /*vector<int> degeneracyOrder = mama.find_degeneracy_order();
+
+    vector<int> K = {2, 3, 4};
+
+    K = mama.order_vertices_degeneracy(K, degeneracyOrder);
+
+    printf("CLIQUE : [");
+    for (long unsigned int i = 0; i < K.size(); i++)
+    {
+        printf("%d ", K[i]);
+    }
+    printf("]\n");
+    */
+
+    //
+
+    /*map<int, vector<int>> cliquesMaxFind = mama.get_cliquesMax();
+
+    printf("taille : %ld \n", cliquesMaxFind.size());
+
+    map<int, vector<int>>::iterator p;
+    for (p = cliquesMaxFind.begin(); p != cliquesMaxFind.end(); p++)
+    {
+        cout << "clique " << p->first << " : ";
+        for (long unsigned int i = 0; i < p->second.size(); i++)
+        {
+            cout << p->second[i] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;*/
 
     //mama2.add_vertice_algo1(mama,0);
     //mama2.add_vertice_algo1(mama,1);
@@ -99,12 +136,23 @@ int main()
     //mama2 = mama2.add_vertice_algo1(mama,4);
     //mama2 = mama2.add_vertice_algo1(mama,5);
 
-    mama2.display_graph();
+    //mama2.display_graph();
 
+    //mama.bron_kerbosch();
 
-    //mama.bron_kerbosch_degeneracy();
+    /*map<int, vector<int>> cliquesMaxFind = mama.get_cliquesMax();
 
-
+    map<int, vector<int>>::iterator p;
+    for (p = cliquesMaxFind.begin(); p != cliquesMaxFind.end(); p++)
+    {
+        cout << "clique " << p->first << " : ";
+        for (long unsigned int i = 0; i < p->second.size(); i++)
+        {
+            cout << p->second[i] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;*/
 
     /*printf("Tri : [");
     for(long unsigned int i = 0; i < ascendingVertices.size(); i++)
@@ -118,8 +166,7 @@ int main()
     printf("]\n\n");*/
     //mama.bron_kerbosch_pivot();
 
-
-   /* 
+    /* 
     // TEST/DEBUG de la fct memcpy pr voir si elle fonctionne avec cliquesMaximales et un struct vertices
     vertices R;
     R.numberOfVerticesInList=1;
@@ -142,6 +189,6 @@ int main()
     int subgrapheSize = 2;
 
     mama.create_subgraph(listSubgraphe, subgrapheSize);*/
-    
+
     return 0;
 }
