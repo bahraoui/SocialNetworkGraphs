@@ -1,12 +1,18 @@
 CC=g++
 OPT=-Wall
-FILES=main.cpp graph.cpp graph.h bronKerbosch.h bronKerbosch.cpp bronKerboschPivot.h bronKerboschPivot.cpp bronKerboschDegeneracy.h bronKerboschPivot.cpp manoussakis.cpp manoussakis.h random.cpp random.h
+MAIN=main.cpp 
 EXE=executable.out
+DEPS=graph.h bronKerbosch.h bronKerboschPivot.h bronKerboschDegeneracy.h manoussakis.h random.h
+PRECOMP=graph.o bronKerbosch.o bronKerboschPivot.o bronKerboschDegeneracy.o manoussakis.o random.o
 
-all:
+all: $(PRECOMP)
 	clear
-	$(CC) $(OPT) $(FILES) -o $(EXE)
-	if [ -e $(EXE) ]; then clear; echo 'Compilation bien effectuépour lancer, faites : \n./$(EXE)\n'; fi
+	$(CC) $(OPT) $(MAIN) $(PRECOMP) -o $(EXE)
+	if [ -e $(EXE) ]; then clear; echo 'Compilation bien effectué\npour lancer, faites : \n./$(EXE)\n'; fi
+
+%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $<
 
 clean:
+	rm *.o
 	rm $(EXE)
