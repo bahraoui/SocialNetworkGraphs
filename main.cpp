@@ -147,11 +147,25 @@ int main()
     printf("Graph 6 : Manoussakis' Algorithm 1  \n");
     printf("###########################################\n\n");
 
-    gManoussakisAlgorithm1.add_vertice(4);
-    gManoussakisAlgorithm1.add_edge(0, 1);
-    gManoussakisAlgorithm1.add_edge(0, 2);
-    gManoussakisAlgorithm1.add_edge(1, 2);
-    gManoussakisAlgorithm1.add_edge(2, 3);
+    gManoussakisAlgorithm1.add_vertice(9);
+    gManoussakisAlgorithm1.add_edge(0,1);
+    gManoussakisAlgorithm1.add_edge(1,2);
+    gManoussakisAlgorithm1.add_edge(1,3);
+    gManoussakisAlgorithm1.add_edge(1,4);
+    gManoussakisAlgorithm1.add_edge(1,6);
+    gManoussakisAlgorithm1.add_edge(2,4);
+    gManoussakisAlgorithm1.add_edge(2,8);
+    gManoussakisAlgorithm1.add_edge(2,5);
+    gManoussakisAlgorithm1.add_edge(3,4);
+    gManoussakisAlgorithm1.add_edge(3,7);
+    gManoussakisAlgorithm1.add_edge(3,8);
+    gManoussakisAlgorithm1.add_edge(4,5);
+    gManoussakisAlgorithm1.add_edge(4,6);
+    gManoussakisAlgorithm1.add_edge(4,7);
+    gManoussakisAlgorithm1.add_edge(4,8);
+    gManoussakisAlgorithm1.add_edge(5,7);
+    gManoussakisAlgorithm1.add_edge(6,8);
+    gManoussakisAlgorithm1.add_edge(7,8);
 
     gManoussakisAlgorithm1.display_graph();
 
@@ -161,10 +175,7 @@ int main()
 
     gManoussakisAlgorithm1.display_cliques();
 
-    printf("\n\nEtant donne plusieurs essais/modification/recherches sur l'algorithme Manoussakis 1, \nnous n'avons pas reussi a implementer l'algorithme.\n");
-    printf("Vous trouverez notre travail dans le fichier manoussakis.cpp + manoussakis.h\n");
-
-    return 0;
+  return 0;
 }
 
 #endif

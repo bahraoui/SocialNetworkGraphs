@@ -68,7 +68,7 @@ map<int, vector<int>> manoussakis_algorithm_1(graph *g)
     {
         create_algo_GJ(g, &Gj, i);
 
-        bron_kerbosch(&Gj);
+        bron_kerbosch_degeneracy(&Gj);
 
         cliquesMaxFind = Gj.get_cliquesMax();
 
@@ -86,18 +86,6 @@ map<int, vector<int>> manoussakis_algorithm_1(graph *g)
             }
             else if (inDeletedClique == -1)
                 T.insert(pair<int, vector<int>>((int)(T.size()), K));
-
-            map<int, vector<int>>::iterator p;
-            for (p = T.begin(); p != T.end(); p++)
-            {
-                cout << "clique " << p->first << " : ";
-                for (long unsigned int i = 0; i < p->second.size(); i++)
-                {
-                    cout << p->second[i] << " ";
-                }
-                cout << endl;
-            }
-            cout << endl;
         }
     }
     g->set_cliquesMax(T);
