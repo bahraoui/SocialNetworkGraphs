@@ -11,7 +11,7 @@
  * @param g2 
  * @param vertice 
  */
-void create_algo_GJ(graph g1, graph g2, int vertice);
+void create_algo_GJ(graph *g1, graph *g2, int vertice);
 
 /**
  * @brief Order a list of vertice thanks to a degeneracy order

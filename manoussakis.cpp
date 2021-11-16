@@ -2,26 +2,27 @@
 
 void create_algo_GJ(graph *g1, graph *g2, int vertice)
 {
-    vector<int> vertices = {};
+    vector<int> verticesToKeep = {};
 
     map<int, vector<int>>::iterator it;
     map<int, vector<int>> adjancyListGraph1 = g1->get_adjancyList(), adjancyListGraph2 = g2->get_adjancyList();
 
-    graph *g3 = g2;
+    graph g3 = *(g1);
 
-    for (it = adjancyListGraph1.begin(); it != adjancyListGraph1.end(); it++)
-        vertices.push_back(it->first);
+    for (it = adjancyListGraph2.begin(); it != adjancyListGraph2.end(); it++)
+        verticesToKeep.push_back(it->first);
 
-    vertices.push_back(vertice);
-
-    for (long unsigned int i = 0; i < adjancyListGraph2.size(); i++)
+    verticesToKeep.push_back(vertice);
+    
+    for (long unsigned int i = 0; i < adjancyListGraph1.size(); i++)
     {
-        if (!count(vertices.begin(), vertices.end(), i))
+        if (!count(verticesToKeep.begin(), verticesToKeep.end(), i))
         {
-            g3->delete_vertice(i);
+            g3.delete_vertice(i);
         }
     }
-    g1 = g3;
+
+    *(g2) = g3;
 }
 
 vector<int> order_vertices_degeneracy(vector<int> clique, vector<int> order)
@@ -54,7 +55,7 @@ map<int, vector<int>> manoussakis_algorithm_1(graph *g)
 {
     int inT, inDeletedClique, vertices = g->get_numberVertices();
 
-    vector<int> K, degeneracyOrder = {}; //find_degeneracy_order(g);
+    vector<int> K, degeneracyOrder = find_degeneracy_order(g);
 
     map<int, vector<int>> T, p, deletedClique, cliquesMaxFind;
     map<int, vector<int>>::iterator it;
@@ -66,14 +67,15 @@ map<int, vector<int>> manoussakis_algorithm_1(graph *g)
     for (int i = 1; i < vertices; i++)
     {
         create_algo_GJ(g, &Gj, i);
+
         bron_kerbosch(&Gj);
 
         cliquesMaxFind = Gj.get_cliquesMax();
 
         for (it = cliquesMaxFind.begin(); it != cliquesMaxFind.end(); it++)
         {
-            K = order_vertices_degeneracy(it->second, degeneracyOrder);
-
+            K = order_vertices_degeneracy(it->second, degeneracyOrder);           
+            
             inT = map_contains_clique(T, K);
             inDeletedClique = map_contains_clique(deletedClique, K);
 
@@ -84,8 +86,20 @@ map<int, vector<int>> manoussakis_algorithm_1(graph *g)
             }
             else if (inDeletedClique == -1)
                 T.insert(pair<int, vector<int>>((int)(T.size()), K));
+
+            map<int, vector<int>>::iterator p;
+            for (p = T.begin(); p != T.end(); p++)
+            {
+                cout << "clique " << p->first << " : ";
+                for (long unsigned int i = 0; i < p->second.size(); i++)
+                {
+                    cout << p->second[i] << " ";
+                }
+                cout << endl;
+            }
+            cout << endl;
         }
     }
-
+    g->set_cliquesMax(T);
     return T;
 }
